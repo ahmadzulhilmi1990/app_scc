@@ -34,6 +34,8 @@ class SignInViewController: UIViewController {
         btn_sign_up.layer.cornerRadius = 20
         btn_sign_up.layer.borderWidth = 1
         btn_sign_up.layer.borderColor = UIColor.black.cgColor
+        
+        onSettings()
     }
     
     override func didReceiveMemoryWarning() {
@@ -125,7 +127,8 @@ class SignInViewController: UIViewController {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type: application/x-www-form-urlencoded")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        let param = "email="+email+"&password="+password
+        let fcm = randomAlphaNumericString(length: 15)
+        let param = "email="+email+"&password="+password+"&fcm="+fcm+"&deviceType=IOS"
         request.httpBody = param.data(using: String.Encoding.utf8)
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -197,6 +200,67 @@ class SignInViewController: UIViewController {
         }))
         
         present(refreshAlert, animated: true, completion: nil)
+    }
+    
+    func randomAlphaNumericString(length: Int) -> String {
+        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let allowedCharsCount = UInt32(allowedChars.characters.count)
+        var randomString = ""
+        
+        for _ in 0..<length {
+            let randomNum = Int(arc4random_uniform(allowedCharsCount))
+            let randomIndex = allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)
+            let newCharacter = allowedChars[randomIndex]
+            randomString += String(newCharacter)
+        }
+        
+        return randomString
+    }
+    
+    func onSettings(){
+        let alarm_message = KeychainWrapper.standardKeychainAccess().string(forKey: "alarm_message")
+        let alarm_update = KeychainWrapper.standardKeychainAccess().string(forKey: "alarm_update")
+        let alarm_location = KeychainWrapper.standardKeychainAccess().string(forKey: "alarm_location")
+        onGenerateLocationData()
+        print("alarm_message: \(String(describing: alarm_message))")
+        print("alarm_update: \(String(describing: alarm_update))")
+        print("alarm_location: \(String(describing: alarm_location))")
+    }
+    
+    func onGenerateLocationData(){
+        let data = SysPara.ARRAY_ALL_DATA
+        if let arr = data {
+            let location_list = arr["location_list"] as? [[String:Any]]
+            print("location_list : \(String(describing: location_list))")
+            
+            for anItem in location_list! {
+                
+                let id = anItem["id"] as AnyObject
+                let location_name = anItem["location_name"] as AnyObject
+                let latitude = anItem["latitude"] as AnyObject
+                let longitude = anItem["longitude"] as AnyObject
+                let radius = anItem["radius"] as AnyObject
+                let created_at = anItem["created_at"] as AnyObject
+                let updated_at = anItem["updated_at"] as AnyObject
+                
+                SysPara.LOC_ID = String(describing: id)
+                SysPara.LOC_NAME = location_name as! String
+                SysPara.LOC_LAT = latitude as! String
+                SysPara.LOC_LNG = longitude as! String
+                SysPara.LOC_RAD = radius as! String
+                SysPara.LOC_CREATED = created_at as! String
+                SysPara.LOC_UPDATED = updated_at as! String
+                
+                print("id : \(String(describing: id))")
+                print("location_name : \(String(describing: location_name))")
+                print("latitude : \(String(describing: latitude))")
+                print("longitude : \(String(describing: longitude))")
+                print("radius : \(String(describing: radius))")
+                print("created_at : \(String(describing: created_at))")
+                print("updated_at : \(String(describing: updated_at))")
+            }
+            
+        }
     }
 
 }

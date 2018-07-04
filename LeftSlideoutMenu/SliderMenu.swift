@@ -12,12 +12,25 @@ class SliderMenu: UIViewController {
 
     // :widget
     @IBOutlet var txt_username: UILabel!
+    @IBOutlet weak var btn_view_profile: UIButton!
+    @IBOutlet weak var btn_change_password: UIButton!
+    @IBOutlet weak var btn_settings: UIButton!
+    @IBOutlet weak var btn_privacy_policy: UIButton!
+    @IBOutlet weak var btn_term_condition: UIButton!
+    @IBOutlet weak var btn_logout: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        txt_username.text = SysPara.USERNAME
+        txt_username.text = "Hi " + SysPara.USERNAME
+        txt_username.font = UIFont(name: "Grotesque MT", size: 16)!
+        btn_view_profile.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
+        btn_change_password.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
+        btn_settings.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
+        btn_privacy_policy.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
+        btn_term_condition.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
+        btn_logout.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,11 +55,11 @@ class SliderMenu: UIViewController {
     }
     
     // :click View Profile
-    @IBAction func toUpdateProfile(sender: AnyObject){
+    @IBAction func toViewProfile(sender: AnyObject){
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let UpdateProfileViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateProfileViewController") as! UpdateProfileViewController
-        UpdateProfileViewController.modalTransitionStyle = .crossDissolve
-        self.present(UpdateProfileViewController, animated: true, completion: { _ in })
+        let ViewProfileViewController = storyBoard.instantiateViewController(withIdentifier: "ViewProfileViewController") as! ViewProfileViewController
+        ViewProfileViewController.modalTransitionStyle = .crossDissolve
+        self.present(ViewProfileViewController, animated: true, completion: { _ in })
     }
     
     func SignInViewController() {
@@ -135,4 +148,12 @@ class SliderMenu: UIViewController {
         
         present(refreshAlert, animated: true, completion: nil)
     }
+    
+    /*func switchToDataTab(){
+        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(switchToDataTabCont), userInfo: nil,repeats: false)
+    }
+    
+    func switchToDataTabCont(){
+        tabBarController!.selectedIndex = 3
+    }*/
 }

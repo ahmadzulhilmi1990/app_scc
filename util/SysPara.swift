@@ -11,26 +11,47 @@ import UIKit
 
 struct SysPara {
     
+    /*** LOCATION DETAILS ***/
+    static var LOC_ID = ""
+    static var LOC_NAME = ""
+    static var LOC_LAT = ""
+    static var LOC_LNG = ""
+    static var LOC_RAD = ""
+    static var LOC_CREATED = ""
+    static var LOC_UPDATED = ""
+    
+    /*** USER DETAILS ID : SESSION ***/
+    static var USERDETAILS_ID = ""
+    
+    /*** TAB CONTROLLER ***/
+    static var TO_TAB = ""
+    
     /*** CAROUSEL ***/
     static var ARRAY_CAROUSEL = ""
     
     /*** ARRAY ***/
+    static var ARRAY_ALL_DATA:  NSDictionary!
     static var ARRAY_DATA = ""
+    static var ARRAY_FOCUS_AREA: Array<Any>!
+    static var ARRAY_EXPERIENCE_ROLE = ""
+    static var ARRAY_COUNTRY = ""
     
+    /*** NEW DETAILS ***/
+    static var NEW_ROW_ID = ""
+    static var NEWS_ID = ""
+    static var NEWS_TYPE = ""
+    static var NEWS_TITLE = ""
+    static var NEWS_DESCRIPTION = ""
+    static var NEWS_IMAGE = ""
+    static var NEWS_CREATED_AT = ""
+    static var NEWS_UPDATED_AT = ""
+    static var NEWS_CURRENT_PAGE = ""
     
     /*** DEVICE DETAILS ***/
     static var DEVICE_MAC_ID = UIDevice.current.identifierForVendor!.uuidString
     static var DEVICE_BRAND = "Apple"
     static var DEVICE_MODEL = UIDevice.current.modelName
     
-
-    /*** UPDATE USER ***/
-    static var SESSION_USER_ID = ""
-    static var SESSION_USER_NAME = ""
-    static var SESSION_USER_LEVEL = ""
-    static var SESSION_USER_TYPE = ""
-    static var SESSION_USER_PHONE = ""
-    static var SESSION_USER_ALLOW_LIST = ""
     
     /*** UITab ***/
     static var SESSION_TAB = 0
@@ -67,32 +88,6 @@ struct SysPara {
     static var USERNAME = ""
     static var VERIFY_TOKEN = ""
     
-    /*** USER_DEPARTMENT ***/
-    static var dp_id = ""
-    static var dp_name = ""
-    static var dp_co_id = ""
-    static var dp_tms_id = ""
-    
-    /*** USER_COMPANY ***/
-    static var co_id = ""
-    static var co_name = ""
-    static var co_addr1 = ""
-    static var co_addr2 = ""
-    static var co_addr3 = ""
-    static var co_tel = ""
-    static var co_fax = ""
-    static var co_tms_id = ""
-    static var co_lat = ""
-    static var co_lng = ""
-    static var co_max_radius = ""
-    static var co_timezone = ""
-    static var co_gst_no = ""
-    
-    /*** socket:task ***/
-    static var isonline = "0"
-    static var task_status = "1"
-    static var task_mode = "2"
-    
     /*** VARIABLE ***/
     static var ERROR_NETWORK = "No Internet Connection. Make sure your device is connected to the internet."
     static var SUCCESS_UPDATE = "Successfully update data."
@@ -109,6 +104,15 @@ struct SysPara {
     static var API_CHANGE_PASSWORD = URL + "changepass/"
     static var API_LOGOUT = URL + "logout/"
     static var API_UPDATE_PROFILE = URL + "profile/"
+    static var API_NEWS = URL + "news/"
+    static var API_GETALLDATA = URL + "getalldata"
+    static var API_GEOFENCE = URL + "geofence/"
+    static var API_CONNECTS = URL + "connect/"
+    static var API_CONNECTS_REQUEST = URL + "connect"
+    static var API_CONNECTS_APPROVE = URL + "connect/approve"
+    static var API_CONNECTS_REQUESTED = URL + "connect/requested/"
+    static var API_SEARCH = URL + "search"
+    static var API_USERDETAILS = URL + "userdetails/"
     
 }
 

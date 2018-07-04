@@ -7,26 +7,24 @@ class MessagingViewController: TabVCTemplate {
         selectedTab = 2
         // do stuff here
         self.title = "Message"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
+        
+        if let tabItems = self.tabBarController?.tabBar.items as NSArray!
+        {
+            // In this case we want to modify the badge number of the third tab:
+            let tabItem = tabItems[2] as! UITabBarItem
+            tabItem.badgeValue = nil
+        }
     }
     
     @IBAction func toggleMenu(_ sender: Any) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "toggleMenu"), object: nil)
     }
     
-    /*
-     // :click btn-sign-up
-     @IBAction func toFilterViewController(_ sender: Any) {
-     FilterViewController()
-     }
-     
-     func FilterViewController() {
-     
-     let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-     let FilterViewController = storyBoard.instantiateViewController(withIdentifier: "FilterViewController") as! FilterViewController
-     FilterViewController.modalTransitionStyle = .crossDissolve
-     self.present(FilterViewController, animated: true, completion: { _ in })
-     
-     }*/
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("MessagingViewController Loaded...")
+    }
     
 }
 

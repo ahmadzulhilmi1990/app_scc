@@ -34,7 +34,7 @@ class SplashViewController: UIViewController {
             
             DispatchQueue.main.async {
                 //SwiftLoader.show(title: "please wait...",animated: true)
-                self.GET_CAROUSEL()
+                self.GET()
             }
             
         }else{
@@ -42,7 +42,7 @@ class SplashViewController: UIViewController {
         }
     }
 
-    func GET_CAROUSEL(){
+    func GET(){
     
         let myUrl = URL(string: SysPara.API_CAROUSEL);
         var request = URLRequest(url:myUrl!)
@@ -70,10 +70,12 @@ class SplashViewController: UIViewController {
                     print("status: \(status)")
                     print("data: \(data)")
                     
-                    //SwiftLoader.hide()
-                    myFunction().onGenerateCarousel(data: arr)
-                    self.CarouselViewController()
-                    
+                    DispatchQueue.main.async {
+                        //SwiftLoader.hide()
+                        myFunction().onGenerateCarousel(data: arr)
+                        self.GET_ALL_DATA()
+                        
+                    }
                 }
             } catch {
                 //SwiftLoader.hide()
@@ -101,6 +103,51 @@ class SplashViewController: UIViewController {
         let CarouselViewController = storyBoard.instantiateViewController(withIdentifier: "CarouselViewController") as! CarouselViewController
         CarouselViewController.modalTransitionStyle = .crossDissolve
         self.present(CarouselViewController, animated: true, completion: { _ in })
+        
+    }
+    
+    func GET_ALL_DATA(){
+        
+        let myUrl = URL(string: SysPara.API_GETALLDATA);
+        var request = URLRequest(url:myUrl!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type: application/x-www-form-urlencoded")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                //SwiftLoader.hide()
+                print("error=\(String(describing: error))")
+                self.showDialog(description: String(describing: error))
+                return
+            }
+            do {
+                let jsonString = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                print("jsonString: \(String(describing: jsonString))")
+                
+                if let parseJSON = jsonString {
+                    
+                    let status = parseJSON["status"] as? String
+                    let arr = parseJSON["data"] as? NSDictionary
+                    //print("status: \(status)")
+                    //print("data: \(data)")
+                    SysPara.ARRAY_ALL_DATA = arr
+                    DispatchQueue.main.async {
+                        //SwiftLoader.hide()
+                        //myFunction().onGenerateAllData()
+                        self.CarouselViewController()
+                        
+                    }
+                }
+            } catch {
+                //SwiftLoader.hide()
+                print(error)
+                self.showDialog(description: String(describing: error))
+            }
+        }
+        task.resume()
         
     }
     
