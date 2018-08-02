@@ -2,15 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>GrotesqueMT.otf</string>
-		<string>RNS_Camelia.otf</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Supply Chain City</string>
+	<string>SCC</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,13 +22,36 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>Camera Usage Description</key>
+	<string>Image Permission</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>Camera Usage Description</key>
+		<string>Image Permission</string>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>Photo Library Usage Description</key>
+		<string>Application need your permission to open your library</string>
+		<key>Privacy - Camera Usage Description</key>
+		<string>Application need your permission to open your library</string>
+		<key>Privacy - Photo Library Usage Description</key>
+		<string>Application need your permission to open your library</string>
+		<key>Privacy — Camera Usage Description</key>
+		<string>Totake awesome photo!</string>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Application need your permission to open your library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Application need your permission to open your library</string>
+	<key>Photo Library Usage Description</key>
+	<string>Application need your permission to open your library</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>GrotesqueMT.otf</string>
+		<string>RNS_Camelia.otf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Main</string>
 	<key>UIMainStoryboardFile</key>
@@ -42,6 +60,10 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UIStatusBarTintParameters</key>
 	<dict>
 		<key>UINavigationBar</key>
@@ -55,13 +77,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

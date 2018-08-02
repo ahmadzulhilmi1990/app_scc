@@ -11,6 +11,8 @@ import UIKit
 class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
 
     // :widget
+    @IBOutlet var btn_block_user: UIButton!
+    @IBOutlet var btn_invite_friends: UIButton!
     @IBOutlet var btn_message: UIButton!
     @IBOutlet var btn_call: UIButton!
     @IBOutlet var btn_email: UIButton!
@@ -52,12 +54,12 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
 
         // Do any additional setup after loading the view.
         
-        self.scrollview.contentSize.height = 850;
+        self.scrollview.contentSize.height = 950;
         
         //txt_about_me.sizeToFit()
         //txt_social_media.sizeToFit()
         
-        txt_title_header?.font = UIFont(name: "RNS Camelia", size: 16)!
+        txt_title_header?.font = UIFont(name: "RNS Camelia", size: 14)!
         txt_username?.font = UIFont(name: "RNS Camelia", size: 12)!
         txt_works?.font = UIFont(name: "RNS Camelia", size: 12)!
         txt_title?.font = UIFont(name: "RNS Camelia", size: 12)!
@@ -86,6 +88,18 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
         txt_btn_call?.font = UIFont(name: "RNS Camelia", size: 12)!
         txt_btn_email?.font = UIFont(name: "RNS Camelia", size: 12)!
         txt_description?.font = UIFont(name: "RNS Camelia", size: 12)!
+        
+        // :button btn-block-users
+        btn_block_user.backgroundColor = .clear
+        btn_block_user.layer.borderWidth = 1
+        btn_block_user.layer.cornerRadius = 8
+        btn_block_user.layer.borderColor = UIColor.gray.cgColor
+        
+        // :button btn-invite-frinds
+        btn_invite_friends.backgroundColor = .clear
+        btn_invite_friends.layer.borderWidth = 1
+        btn_invite_friends.layer.cornerRadius = 8
+        btn_invite_friends.layer.borderColor = UIColor.gray.cgColor
         
         if Connection.isConnectedToNetwork() == true {
             

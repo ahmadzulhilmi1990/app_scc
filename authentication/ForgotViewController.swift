@@ -15,23 +15,37 @@ class ForgotViewController: UIViewController {
     
     // :widget
     @IBOutlet var btn_back: UIButton!
+    @IBOutlet var img_back: UIImageView!
     @IBOutlet var btn_submit: UIButton!
     @IBOutlet var email_input: UITextField!
+    @IBOutlet var bar_email: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#42B4D0")
+        
         // :button btn_submit
-        btn_submit.backgroundColor = .clear
+        /*btn_submit.backgroundColor = .clear
         btn_submit.layer.cornerRadius = 20
         btn_submit.layer.borderWidth = 1
-        btn_submit.layer.borderColor = UIColor.black.cgColor
+        btn_submit.layer.borderColor = UIColor.black.cgColor*/
+        
+        btn_submit.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        btn_submit.layer.cornerRadius = 10
+        
+        email_input.addTarget(self, action: #selector(textFieldEmailDidChange(_:)), for: .editingChanged)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func textFieldEmailDidChange(_ textField: UITextField) {
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
     }
     
     // :click btn-back
@@ -45,6 +59,7 @@ class ForgotViewController: UIViewController {
         if Connection.isConnectedToNetwork() == true {
             
             email = email_input.text
+            bar_email.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
             
             if(email.isEmpty == false){
                 
@@ -141,6 +156,27 @@ class ForgotViewController: UIViewController {
         }))
         
         present(refreshAlert, animated: true, completion: nil)
+    }
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
 
 }

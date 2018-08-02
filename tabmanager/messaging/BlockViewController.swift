@@ -12,12 +12,14 @@ class BlockViewController: UIViewController,UITableViewDataSource, UITableViewDe
     
     // :widget
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var txt_title: UILabel!
     
     // :variable
     var collection_users: [Users] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
         
         if Connection.isConnectedToNetwork() == true {
             
@@ -150,6 +152,7 @@ class BlockViewController: UIViewController,UITableViewDataSource, UITableViewDe
                 let gender = anItem["gender"] as Any!
                 let role_code = anItem["role_code"] as Any!
                 let focus_code = anItem["focus_code"] as Any!
+                let photo_url = anItem["photo_url"] as Any!
                 
                 print("user_id : \(String(describing: user_id))")
                 print("fullname : \(String(describing: fullname))")
@@ -158,7 +161,7 @@ class BlockViewController: UIViewController,UITableViewDataSource, UITableViewDe
                 print("role_code : \(String(describing: role_code))")
                 print("focus_code : \(String(describing: focus_code))")
                 
-                let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String)
+                let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String, photo_url: photo_url as! String)
                 
                 print(arr_users)
                 collection_users.append(arr_users)

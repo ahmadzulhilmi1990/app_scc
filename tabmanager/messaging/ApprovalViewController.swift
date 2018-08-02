@@ -12,6 +12,7 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
 
     // :widget
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var txt_title: UILabel!
     
     // :variable
     var collection_users: [Users] = []
@@ -19,6 +20,8 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
+        
         if Connection.isConnectedToNetwork() == true {
             
             DispatchQueue.main.async {
@@ -44,9 +47,6 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type: application/x-www-form-urlencoded")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
-        //let param = "token="+SysPara.TOKEN+"&connectUserID=ivcWVQl4"
-        //request.httpBody = param.data(using: String.Encoding.utf8)
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
@@ -132,6 +132,11 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
         let uid = arr1?.replacingOccurrences(of: ")", with: "")
         print("userID : \(String(describing: uid))")
         
+        DispatchQueue.main.async {
+            let str = "Hi "+SysPara.USERNAME + "," + SysPara.ALERT_APPROVED
+            self.showDialogApproved(description: str,userid: uid!)
+        }
+        
     }
     
     /*********************** END TABLE ******************************/
@@ -150,6 +155,8 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
                 let gender = anItem["gender"] as Any!
                 let role_code = anItem["role_code"] as Any!
                 let focus_code = anItem["focus_code"] as Any!
+                let photo_url = anItem["photo_url"] as Any!
+                
                 
                 print("user_id : \(String(describing: user_id))")
                 print("fullname : \(String(describing: fullname))")
@@ -158,7 +165,7 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
                 print("role_code : \(String(describing: role_code))")
                 print("focus_code : \(String(describing: focus_code))")
                 
-                let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String)
+                let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String, photo_url: photo_url as! String)
                 
                 print(arr_users)
                 collection_users.append(arr_users)
@@ -182,10 +189,156 @@ class ApprovalViewController: UIViewController,UITableViewDataSource, UITableVie
         
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             if(id == 1){
+                
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                let ContainerVC = storyBoard.instantiateViewController(withIdentifier: "ContainerVC") as! ContainerVC
+                ContainerVC.modalTransitionStyle = .crossDissolve
+                self.present(ContainerVC, animated: true, completion: { _ in })
+                
             }
         }))
         
         present(refreshAlert, animated: true, completion: nil)
+    }
+    
+    
+    
+    func POST_APPROVE(token: String, userid: String){
+        
+        let myUrl = URL(string: SysPara.API_CONNECTS_APPROVE)
+        var request = URLRequest(url:myUrl!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type: application/x-www-form-urlencoded")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let param = "token="+token+"&requestedUserID="+userid
+        request.httpBody = param.data(using: String.Encoding.utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                print("error=\(String(describing: error))")
+                SwiftLoader.hide()
+                self.showDialog(description: String(describing: error),id: 0)
+                return
+            }
+            
+            do {
+                let jsonString = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                print("jsonString: \(String(describing: jsonString))")
+                if let parseJSON = jsonString {
+                    
+                    let status = parseJSON["status"] as? String
+                    let arr = parseJSON["data"] as? NSDictionary
+                    print("status: \(String(describing: status))")
+                    print("data: \(String(describing: arr))")
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        if(status == "success"){
+                            self.showDialog(description: status,id: 1)
+                        }
+                        
+                    }
+                }
+            } catch {
+                SwiftLoader.hide()
+                self.showDialog(description: String(describing: error),id: 0)
+                print(error)
+            }
+        }
+        task.resume()
+        
+    }
+    
+    func REJECT(token: String, userid: String){
+        
+        let myUrl = URL(string: SysPara.API_CONNECTS_REJECT+userid+"/"+token)
+        var request = URLRequest(url:myUrl!)
+        request.httpMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type: application/x-www-form-urlencoded")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                print("error=\(String(describing: error))")
+                SwiftLoader.hide()
+                self.showDialog(description: String(describing: error),id: 0)
+                return
+            }
+            
+            do {
+                let jsonString = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                print("jsonString: \(String(describing: jsonString))")
+                if let parseJSON = jsonString {
+                    
+                    let status = parseJSON["status"] as? String
+                    let arr = parseJSON["data"] as? NSDictionary
+                    print("status: \(String(describing: status))")
+                    print("data: \(String(describing: arr))")
+                    
+                    DispatchQueue.main.async {
+                        SwiftLoader.hide()
+                        if(status == "success"){
+                            self.showDialog(description: status,id: 1)
+                        }
+                        
+                    }
+                }
+            } catch {
+                SwiftLoader.hide()
+                self.showDialog(description: String(describing: error),id: 0)
+                print(error)
+            }
+        }
+        task.resume()
+        
+    }
+    
+    func showDialogApproved(description: String!,userid: String){
+        
+        let alert = UIAlertController(title: "Message", message: description, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Confirm", style: .default , handler:{ (UIAlertAction)in
+            
+            if Connection.isConnectedToNetwork() == true {
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.show(title: "please wait...",animated: true)
+                    self.POST_APPROVE(token: SysPara.TOKEN, userid: userid)
+                }
+                
+            }else{
+                self.showDialog(description: SysPara.ERROR_NETWORK,id: 0)
+            }
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Block User", style: .default , handler:{ (UIAlertAction)in
+            if Connection.isConnectedToNetwork() == true {
+                
+                DispatchQueue.main.async {
+                    SwiftLoader.show(title: "please wait...",animated: true)
+                    self.REJECT(token: SysPara.TOKEN, userid: userid)
+                    
+                }
+                
+            }else{
+                self.showDialog(description: SysPara.ERROR_NETWORK,id: 0)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler:{ (UIAlertAction)in
+            print("User click Dismiss button")
+        }))
+        
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+        
     }
 
 }

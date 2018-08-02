@@ -16,8 +16,9 @@ class Users {
     var user_gender: String?
     var user_role_code: String?
     var user_focus_code: String?
+    var photo_url: String?
     
-    init(user_id: String, user_email: String, user_fullname: String, user_gender: String, user_role_code: String,user_focus_code: String) {
+    init(user_id: String, user_email: String, user_fullname: String, user_gender: String, user_role_code: String,user_focus_code: String,photo_url: String) {
         
         self.user_id = user_id
         self.user_email = user_email
@@ -25,6 +26,7 @@ class Users {
         self.user_gender = user_gender
         self.user_role_code = user_role_code
         self.user_focus_code = user_focus_code
+        self.photo_url = photo_url
         
     }
 }

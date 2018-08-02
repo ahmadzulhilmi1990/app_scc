@@ -24,7 +24,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
         
         print("hi connect view...")
         self.title = "Connect"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
+        //self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
         
         textBox.font = UIFont(name: "RNS Camelia", size: 14)!
         dropDown.isHidden = true
@@ -48,13 +48,14 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
             showDialog(description: SysPara.ERROR_NETWORK,id: 0)
         }
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(ConnectPeopleViewController.tapFunction))
+        textBox.isHidden = true
+        /*let tap = UITapGestureRecognizer(target: self, action: #selector(ConnectPeopleViewController.tapFunction))
         textBox.isUserInteractionEnabled = true
         textBox.addGestureRecognizer(tap)
         
         textBox.layer.cornerRadius = 8
         textBox.layer.borderWidth = 0.5
-        textBox.layer.borderColor = UIColor.gray.cgColor
+        textBox.layer.borderColor = UIColor.gray.cgColor*/
         
         onGenerateData()
         
@@ -155,7 +156,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
     @objc
     func tapFunction(sender:UITapGestureRecognizer) {
         print("tap working")
-        self.dropDown.isHidden = false
+        self.dropDown.isHidden = true
     }
     
     func onGenerateData(){
@@ -217,8 +218,21 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
         
         //user name
         cell.txt_title?.text = model.user_fullname
-        cell.txt_title?.font = UIFont(name: "RNS Camelia", size: 12)!
-        cell.txt_position?.font = UIFont(name: "RNS Camelia", size: 10)!
+        //cell.txt_title?.font = UIFont(name: "RNS Camelia", size: 12)!
+        //cell.txt_position?.font = UIFont(name: "RNS Camelia", size: 10)!
+        
+        cell.img_view.image = cell.img_view.image!.withRenderingMode(.alwaysTemplate)
+        cell.img_view.tintColor = hexStringToUIColor(hex: "#b4b4b4")
+        
+        let imgdata = model.photo_url
+        if((imgdata?.characters.count)! > 0){
+            if Connection.isConnectedToNetwork() == true {
+                DispatchQueue.main.async {
+                    cell.img_view.downloadedFrom(link: model.photo_url!)
+                }
+            }
+        }
+
         
         // Returning the cell
         return cell
@@ -374,6 +388,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
                     let gender = anItem["gender"] as Any!
                     let role_code = anItem["role_code"] as Any!
                     let focus_code = anItem["focus_code"] as Any!
+                    let photo_url = anItem["photo_url"] as Any!
                     
                     print("user_id : \(String(describing: user_id))")
                     print("fullname : \(String(describing: fullname))")
@@ -382,7 +397,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
                     print("role_code : \(String(describing: role_code))")
                     print("focus_code : \(String(describing: focus_code))")
                     
-                    let arr_users = Users(user_id: String(describing:user_id), user_email: email as! String, user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String)
+                    let arr_users = Users(user_id: String(describing:user_id), user_email: email as! String, user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String,photo_url: photo_url as! String)
                     
                     print(arr_users)
                     collection_users.append(arr_users)
@@ -406,6 +421,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
                 let gender = anItem["gender"] as Any!
                 let role_code = anItem["role_code"] as Any!
                 let focus_code = anItem["focus_code"] as Any!
+                let photo_url = anItem["photo_url"] as Any!
                 
                 print("user_id : \(String(describing: user_id))")
                 print("fullname : \(String(describing: fullname))")
@@ -419,7 +435,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
                     let fcode = String(describing: focus_code)
                     if(fcode == search) {
                     
-                        let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String)
+                        let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String, photo_url: photo_url as! String)
                         
                         print(arr_users)
                         collection_users.append(arr_users)
@@ -429,7 +445,7 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
                 
                 }else{
                     
-                    let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String)
+                    let arr_users = Users(user_id: String(describing:user_id), user_email: email , user_fullname: fullname as! String, user_gender: gender as! String, user_role_code: role_code as! String,user_focus_code: focus_code as! String, photo_url: photo_url as! String)
                     
                     print(arr_users)
                     collection_users.append(arr_users)
@@ -441,6 +457,19 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
         }
     }
     
+    @IBAction func toFilterDataViewController(sender: AnyObject){
+        FilterDataViewController()
+    }
+    
+    func FilterDataViewController() {
+        SysPara.TO_TAB = "1"
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let FilterDataViewController = storyBoard.instantiateViewController(withIdentifier: "FilterDataViewController") as! FilterDataViewController
+        FilterDataViewController.modalTransitionStyle = .crossDissolve
+        self.present(FilterDataViewController, animated: true, completion: { _ in })
+        
+    }
+    
     func UserDetailsViewController() {
         
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
@@ -450,6 +479,48 @@ class ConnectPeopleViewController: TabVCTemplate,UIPickerViewDelegate, UIPickerV
         
     }
     
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+}
+extension UIImageView {
+    func downloadedFrom(url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit) {
+        contentMode = mode
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else { return }
+            DispatchQueue.main.async() {
+                self.image = image
+            }
+            }.resume()
+    }
+    func downloadedFrom(link: String, contentMode mode: UIViewContentMode = .scaleAspectFit) {
+        guard let url = URL(string: link) else { return }
+        downloadedFrom(url: url, contentMode: mode)
+    }
 }
 
 

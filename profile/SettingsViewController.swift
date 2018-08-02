@@ -14,11 +14,14 @@ class SettingsViewController: UIViewController {
     @IBOutlet var alarm_message: UISwitch!
     @IBOutlet var alarm_update: UISwitch!
     @IBOutlet var alarm_location: UISwitch!
+    @IBOutlet var txt_title: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
+        
+        txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
         
         alarm_message.addTarget(self, action: #selector(switch_message), for: UIControlEvents.valueChanged)
         

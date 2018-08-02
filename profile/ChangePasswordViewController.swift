@@ -15,19 +15,36 @@ class ChangePasswordViewController: UIViewController {
     var oldpass: String!
     
     // :widget
+    @IBOutlet var img_back: UIImageView!
     @IBOutlet var btn_reset_password: UIButton!
     @IBOutlet var newpass_input: UITextField!
     @IBOutlet var oldpass_input: UITextField!
+    @IBOutlet var bar_new_password: UILabel!
+    @IBOutlet var bar_cnrm_password: UILabel!
+    //@IBOutlet var txt_title: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
+        newpass_input.backgroundColor = .clear
+        oldpass_input.backgroundColor = .clear
+        
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#42B4D0")
         
         // :button reset-password
-        btn_reset_password.backgroundColor = .clear
-        btn_reset_password.layer.cornerRadius = 20
-        btn_reset_password.layer.borderWidth = 1
-        btn_reset_password.layer.borderColor = UIColor.black.cgColor
+        //btn_reset_password.backgroundColor = .clear
+        btn_reset_password.layer.cornerRadius = 8
+        //btn_reset_password.layer.borderWidth = 1
+        //btn_reset_password.layer.borderColor = UIColor.black.cgColor
+        
+        //txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
+        
+        
+        newpass_input.addTarget(self, action: #selector(textFieldNewPassDidChange(_:)), for: .editingChanged)
+        
+        oldpass_input.addTarget(self, action: #selector(textFieldConfirmPassDidChange(_:)), for: .editingChanged)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,8 +52,30 @@ class ChangePasswordViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // :click btn-back
+    @IBAction func toBack(sender: AnyObject){
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let ContainerVC = storyBoard.instantiateViewController(withIdentifier: "ContainerVC") as! ContainerVC
+        ContainerVC.modalTransitionStyle = .crossDissolve
+        self.present(ContainerVC, animated: true, completion: { _ in })
+    }
+    
+    @objc func textFieldNewPassDidChange(_ textField: UITextField) {
+        bar_new_password.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        bar_cnrm_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+    }
+    
+    @objc func textFieldConfirmPassDidChange(_ textField: UITextField) {
+        bar_new_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_cnrm_password.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+    }
+    
     // :click btn-submit
     @IBAction func toSubmit(sender: AnyObject){
+        
+        bar_new_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_cnrm_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
         
         if Connection.isConnectedToNetwork() == true {
             
@@ -45,9 +84,14 @@ class ChangePasswordViewController: UIViewController {
             
             if(newpass.isEmpty == false && oldpass.isEmpty == false){
                 
-                DispatchQueue.main.async {
-                    SwiftLoader.show(title: "please wait...",animated: true)
-                    self.POST(token: SysPara.TOKEN, newpass: self.newpass, oldpass: self.oldpass)
+                if(newpass == oldpass){
+                
+                    DispatchQueue.main.async {
+                        SwiftLoader.show(title: "please wait...",animated: true)
+                        self.POST(token: SysPara.TOKEN, newpass: self.newpass, oldpass: self.oldpass)
+                    }
+                }else{
+                    showDialog(description: "Please re-type password.",id: 0)
                 }
                 
             }else{
@@ -144,6 +188,28 @@ class ChangePasswordViewController: UIViewController {
         }))
         
         present(refreshAlert, animated: true, completion: nil)
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
 
 }

@@ -24,6 +24,8 @@ class FilterViewController: UIViewController,UITableViewDataSource, UITableViewD
     @IBOutlet var box_approval: UILabel!
     @IBOutlet var box_block: UILabel!
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var img_new_user: UIImageView!
+    @IBOutlet var img_all_user: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +61,24 @@ class FilterViewController: UIViewController,UITableViewDataSource, UITableViewD
         box_block.layer.borderColor = UIColor.gray.cgColor
         
         DispatchQueue.main.async {
+            
+            let arr = SysPara.ARRAY_FILTER_FOCUS_AREA
+            if arr.contains("New Users") {
+                self.img_new_user.image = self.img_new_user.image!.withRenderingMode(.alwaysTemplate)
+                self.img_new_user.tintColor = UIColor.green
+             }else{
+                self.img_new_user.image = self.img_new_user.image!.withRenderingMode(.alwaysTemplate)
+                self.img_new_user.tintColor = UIColor.gray
+            }
+            
+            if arr.contains("All Users") {
+                self.img_all_user.image = self.img_all_user.image!.withRenderingMode(.alwaysTemplate)
+                self.img_all_user.tintColor = UIColor.green
+            }else{
+                self.img_all_user.image = self.img_all_user.image!.withRenderingMode(.alwaysTemplate)
+                self.img_all_user.tintColor = UIColor.gray
+            }
+            
             self.onGenerateFocusAreaData()
         }
     }
@@ -101,6 +121,17 @@ class FilterViewController: UIViewController,UITableViewDataSource, UITableViewD
         cell.txt_title?.text = model.focus_name
         //cell.txt_title?.font = UIFont(name: "RNS Camelia", size: 12)!
         
+        let arr = SysPara.ARRAY_FILTER_FOCUS_AREA
+        print(arr)
+        
+        if arr.contains(model.focus_code!) {
+            cell.img_tick.image = cell.img_tick.image!.withRenderingMode(.alwaysTemplate)
+            cell.img_tick.tintColor = UIColor.green
+        }else{
+            cell.img_tick.image = cell.img_tick.image!.withRenderingMode(.alwaysTemplate)
+            cell.img_tick.tintColor = UIColor.gray
+        }
+        
         // Returning the cell
         return cell
         
@@ -111,6 +142,29 @@ class FilterViewController: UIViewController,UITableViewDataSource, UITableViewD
         
         let row = indexPath.row
         let model = collection_focus_area[row]
+        let fcode = model.focus_code
+        
+        let arr = SysPara.ARRAY_FILTER_FOCUS_AREA
+        if(arr.isEmpty){
+            print("ADDED!")
+            SysPara.ARRAY_FILTER_FOCUS_AREA.append(fcode as String!)
+        }else{
+            for id in arr {
+                if(model.focus_code == id){ // remove from filter
+                    print("REMOVE!")
+                    SysPara.ARRAY_FILTER_FOCUS_AREA = SysPara.ARRAY_FILTER_FOCUS_AREA.filter { $0 != id }
+                }else{ // added filter
+                    print("ADDED!")
+                    SysPara.ARRAY_FILTER_FOCUS_AREA.append(fcode as String!)
+                }
+            }
+        }
+        //DispatchQueue.main.async { self.tableView.reloadData() }
+        DispatchQueue.main.async {
+            print("ARRAY_FILTER_FOCUS_AREA = \(SysPara.ARRAY_FILTER_FOCUS_AREA)")
+            self.collection_focus_area.removeAll()
+            self.onGenerateFocusAreaData()
+        }
         
     }
     
@@ -165,6 +219,53 @@ class FilterViewController: UIViewController,UITableViewDataSource, UITableViewD
         let BlockViewController = storyBoard.instantiateViewController(withIdentifier: "BlockViewController") as! BlockViewController
         BlockViewController.modalTransitionStyle = .crossDissolve
         self.present(BlockViewController, animated: true, completion: { _ in })
+    }
+    
+    // :click btn-new-user
+    @IBAction func onFilterNewUser(sender: AnyObject){
+     
+        if(img_new_user.tintColor == UIColor.green){ // Remove from filter
+            print("REMOVE!")
+            SysPara.ARRAY_FILTER_FOCUS_AREA = SysPara.ARRAY_FILTER_FOCUS_AREA.filter { $0 != "New Users" }
+            img_new_user.image = img_new_user.image!.withRenderingMode(.alwaysTemplate)
+            img_new_user.tintColor = UIColor.gray
+        }else{
+            print("ADDED!")
+            SysPara.ARRAY_FILTER_FOCUS_AREA.append("New Users")
+            img_new_user.image = img_new_user.image!.withRenderingMode(.alwaysTemplate)
+            img_new_user.tintColor = UIColor.green
+        }
+        
+    }
+    
+    // :click btn-all-user
+    @IBAction func onFilterAllUser(sender: AnyObject){
+        
+        if(img_all_user.tintColor == UIColor.green){ // Remove from filter
+            print("REMOVE!")
+            SysPara.ARRAY_FILTER_FOCUS_AREA = SysPara.ARRAY_FILTER_FOCUS_AREA.filter { $0 != "All Users" }
+            img_all_user.image = img_all_user.image!.withRenderingMode(.alwaysTemplate)
+            img_all_user.tintColor = UIColor.gray
+        }else{
+            print("ADDED!")
+            SysPara.ARRAY_FILTER_FOCUS_AREA.append("All Users")
+            img_all_user.image = img_all_user.image!.withRenderingMode(.alwaysTemplate)
+            img_all_user.tintColor = UIColor.green
+        }
+        
+    }
+
+    // :click btn-reset
+    @IBAction func onFilterReset(sender: AnyObject){
+        
+        SysPara.TO_TAB = "1"
+        SysPara.ARRAY_FILTER_FOCUS_AREA.removeAll()
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let ContainerVC = storyBoard.instantiateViewController(withIdentifier: "ContainerVC") as! ContainerVC
+        ContainerVC.modalTransitionStyle = .crossDissolve
+        self.present(ContainerVC, animated: true, completion: { _ in })
+        
     }
     
     func showDialog(description: String!,id: Int){

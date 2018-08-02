@@ -18,21 +18,35 @@ class SliderMenu: UIViewController {
     @IBOutlet weak var btn_privacy_policy: UIButton!
     @IBOutlet weak var btn_term_condition: UIButton!
     @IBOutlet weak var btn_logout: UIButton!
+    @IBOutlet weak var avatar: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        txt_username.text = "Hi " + SysPara.USERNAME
-        txt_username.font = UIFont(name: "Grotesque MT", size: 16)!
+        txt_username.text = SysPara.USERNAME
+        /*txt_username.font = UIFont(name: "RNS Camelia", size: 16)!
         btn_view_profile.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
         btn_change_password.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
         btn_settings.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
         btn_privacy_policy.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
         btn_term_condition.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
-        btn_logout.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!
+        btn_logout.titleLabel!.font = UIFont(name: "RNS Camelia", size: 14)!*/
+        
+        self.avatar.image = self.avatar.image!.withRenderingMode(.alwaysTemplate)
+        self.avatar.tintColor = hexStringToUIColor(hex: "#FFFFFF")
+        
+        //let avatarBase64 = KeychainWrapper.standardKeychainAccess().string(forKey: SysPara.AVATAR_BASE64)
+        //avatar.image = ConvertBase64StringToImage(imageBase64String: avatarBase64!)
+        
     }
 
+    func ConvertBase64StringToImage (imageBase64String:String) -> UIImage {
+        let imageData = Data.init(base64Encoded: imageBase64String, options: .init(rawValue: 0))
+        let image = UIImage(data: imageData!)
+        return image!
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -156,4 +170,26 @@ class SliderMenu: UIViewController {
     func switchToDataTabCont(){
         tabBarController!.selectedIndex = 3
     }*/
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
 }

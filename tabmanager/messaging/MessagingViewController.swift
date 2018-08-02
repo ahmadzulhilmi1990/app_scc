@@ -7,7 +7,7 @@ class MessagingViewController: TabVCTemplate {
         selectedTab = 2
         // do stuff here
         self.title = "Message"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
+        //self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
         
         if let tabItems = self.tabBarController?.tabBar.items as NSArray!
         {

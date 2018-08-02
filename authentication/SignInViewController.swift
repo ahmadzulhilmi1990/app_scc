@@ -7,35 +7,75 @@
 //
 
 import UIKit
+import Foundation
+//import DropDown
 
-class SignInViewController: UIViewController {
-
+class SignInViewController: UIViewController,TDDropdownListDelegate{
+    
     // :variable
     var email: String!
     var password: String!
+    var list = TDDropdownList(frame: CGRect(x:100 , y : 367 , width: 170 , height: 49))
     
     // :widget
     @IBOutlet var btn_back: UIButton!
+    @IBOutlet var img_back: UIImageView!
     @IBOutlet var btn_sign_in: UIButton!
-    @IBOutlet var btn_sign_up: UIButton!
     @IBOutlet var email_input: UITextField!
     @IBOutlet var password_input: UITextField!
+    @IBOutlet var box: UIView!
+    @IBOutlet var bar_email: UILabel!
+    @IBOutlet var bar_password: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // :view box
+        email_input.backgroundColor = .clear
+        password_input.backgroundColor = .clear
+        box.layer.cornerRadius = 10
+        
         // :button sign-in
         btn_sign_in.layer.cornerRadius = 20
         
-        // :button sign-up
-        btn_sign_up.backgroundColor = .clear
-        btn_sign_up.layer.cornerRadius = 20
-        btn_sign_up.layer.borderWidth = 1
-        btn_sign_up.layer.borderColor = UIColor.black.cgColor
+        // :button sign-in
+        btn_sign_in.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        btn_sign_in.layer.cornerRadius = 10
+        //btn_sign_in.layer.borderWidth = 1
+        //btn_sign_in.layer.borderColor = UIColor.black.cgColor
+        
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#42B4D0")
         
         onSettings()
+        
+        email_input.addTarget(self, action: #selector(textFieldEmailDidChange(_:)), for: .editingChanged)
+
+        password_input.addTarget(self, action: #selector(textFieldPasswordDidChange(_:)), for: .editingChanged)
+
+    }
+    
+    @objc func textFieldEmailDidChange(_ textField: UITextField) {
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        bar_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        
+        let current_text = isValidEmail(testStr: textField.text!)
+        print(current_text)
+        
+    }
+    
+    func isValidEmail(testStr:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: testStr)
+    }
+    
+    @objc func textFieldPasswordDidChange(_ textField: UITextField) {
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_password.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
     }
     
     override func didReceiveMemoryWarning() {
@@ -60,7 +100,19 @@ class SignInViewController: UIViewController {
     // :click Forgot Password?
     @IBAction func toForgotViewController(sender: AnyObject){
         ForgotViewController()
+        
     }
+    
+    /*AttachmentHandler.shared.showAttachmentActionSheet(vc: self)
+     AttachmentHandler.shared.imagePickedBlock = { (image) in
+     /* get your image here */
+     }
+     AttachmentHandler.shared.videoPickedBlock = {(url) in
+     /* get your compressed video url here */
+     }
+     AttachmentHandler.shared.filePickedBlock = {(filePath) in
+     /* get your file path url here */
+     }*/
     
     func ForgotViewController() {
         
@@ -92,6 +144,9 @@ class SignInViewController: UIViewController {
             
             email = email_input.text
             password = password_input.text
+            
+            bar_email.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+            bar_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
             
             if(email.isEmpty == false && password.isEmpty == false){
                 
@@ -262,7 +317,35 @@ class SignInViewController: UIViewController {
             
         }
     }
-
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    func listTapped(sender: UIButton) {
+        let alert = UIAlertController(title: "TDDropdownList" ,message: "Selected item: \(sender.currentTitle!)", preferredStyle:.alert)
+        alert.addAction(UIAlertAction(title:"OK", style: .default, handler:nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 

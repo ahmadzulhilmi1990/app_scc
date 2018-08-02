@@ -43,28 +43,27 @@ class ViewProfileViewController: UIViewController,UIScrollViewDelegate {
         self.hideKeyboardWhenTappedAround()
         txt_username.text = SysPara.USERNAME
         
-        // :button edit-profile/logout
-        btn_edit_profile.layer.cornerRadius = 5
-        btn_logout.layer.cornerRadius = 5
         
         // :button edit-profile
         btn_edit_profile.backgroundColor = .clear
         btn_edit_profile.layer.borderWidth = 1
-        btn_edit_profile.layer.borderColor = UIColor.black.cgColor
+        btn_edit_profile.layer.cornerRadius = 8
+        btn_edit_profile.layer.borderColor = UIColor.gray.cgColor
         
         // :button logout
         btn_logout.backgroundColor = .clear
         btn_logout.layer.borderWidth = 1
-        btn_logout.layer.borderColor = UIColor.black.cgColor
+        btn_logout.layer.cornerRadius = 8
+        btn_logout.layer.borderColor = UIColor.gray.cgColor
         
         // :button home
         btn_home.backgroundColor = .clear
-        btn_home.layer.cornerRadius = 10
+        btn_home.layer.cornerRadius = 8
         btn_home.layer.borderWidth = 1
-        btn_home.layer.borderColor = UIColor.black.cgColor
+        btn_home.layer.borderColor = UIColor.gray.cgColor
         
         //self.scrollview.frame = self.view.bounds;
-        self.scrollview.contentSize.height = 1000;
+        self.scrollview.contentSize.height = 900;
         
         txt_about_me.sizeToFit()
         txt_social_media.sizeToFit()
@@ -81,7 +80,7 @@ class ViewProfileViewController: UIViewController,UIScrollViewDelegate {
         txt_contact_no.text = SysPara.PHONE_NO
         txt_social_media.text = SysPara.FACEBOOK + "\n" + SysPara.INSTAGRAM
         
-        txt_title_header?.font = UIFont(name: "RNS Camelia", size: 16)!
+        txt_title_header?.font = UIFont(name: "RNS Camelia", size: 14)!
         txt_username?.font = UIFont(name: "RNS Camelia", size: 12)!
         txt_title?.font = UIFont(name: "RNS Camelia", size: 12)!
         txt_company?.font = UIFont(name: "RNS Camelia", size: 12)!

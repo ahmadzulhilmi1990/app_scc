@@ -24,10 +24,9 @@ class HomeViewController: TabVCTemplate,UITableViewDataSource, UITableViewDelega
         selectedTab = 0
         // do stuff here
         
-        self.title = "Home Page"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
-        
-        //self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Grotesque MT", size: 15)!]
+        self.title = "Home"
+        //self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "System", size: 15)!]
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         
         if let tabItems = self.tabBarController?.tabBar.items as NSArray!
         {
@@ -141,7 +140,13 @@ class HomeViewController: TabVCTemplate,UITableViewDataSource, UITableViewDelega
                     print("created_at : \(String(describing: created_at))")
                     print("updated_at : \(String(describing: updated_at))")
                     
-                    let arr_news = News(id: String(describing: id) as! String , news_id: news_id! as! String, news_type: news_type! as! String, news_title: news_title! as! String, news_description: news_description! as! String,news_image: news_image as! String, created_at: created_at! as! String, updated_at: updated_at! as! String, current_page: current_page as! String)
+                    let dateData = created_at as! String!
+                    let arrDate = dateData?.components(separatedBy: " ")
+                    let full_date = arrDate![0]
+                    let full_date_naming = formattedDateFromString(dateString: full_date, withFormat: "dd MMM yyyy")
+                    
+                    
+                    let arr_news = News(id: String(describing: id) as! String , news_id: news_id! as! String, news_type: news_type! as! String, news_title: news_title! as! String, news_description: news_description! as! String,news_image: news_image as! String, created_at: full_date_naming! as! String, updated_at: updated_at! as! String, current_page: current_page as! String)
                     
                     print(arr_news)
                     collection_news.append(arr_news)
@@ -158,7 +163,7 @@ class HomeViewController: TabVCTemplate,UITableViewDataSource, UITableViewDelega
    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 200.0;//Choose your custom row height
+        return 190.0;
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -183,16 +188,28 @@ class HomeViewController: TabVCTemplate,UITableViewDataSource, UITableViewDelega
         self.tableView.rowHeight = 50.0
         
         //device name
+        cell.txt_date?.text = model.created_at
         cell.txt_title?.text = model.news_title
-        cell.txt_title?.font = UIFont(name: "Grotesque MT", size: 16)!
+        //cell.txt_title?.font = UIFont(name: "Grotesque MT", size: 16)!
         //cell.txt_desc?.font = UIFont(name: "RNS Camelia", size: 12)!
         //self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Grotesque MT", size: 15)!]
+        //print(indexPath.row)
+        let current_row = indexPath.row + 1
+        
+        if(collection_news.count > 1){
+            if(current_row >= collection_news.count){
+                
+                let pre_model = collection_news[indexPath.row - 1]
+                let pre_date = pre_model.created_at
+                
+                if(pre_date == model.created_at)
+                {
+                    cell.txt_date.isHidden = true
+                }
+            }
+        }
         
         cell.txt_desc?.text = model.news_description
-        //cell.txt_desc?.sizeToFit()
-        if let imgdata = model.news_image, imgdata.count > 0 {
-            cell.img_view.downloadedFrom(link: model.news_image!)
-        }
         
         // Returning the cell
         return cell
@@ -307,6 +324,22 @@ class HomeViewController: TabVCTemplate,UITableViewDataSource, UITableViewDelega
         }
         task.resume()
         
+    }
+    
+    func formattedDateFromString(dateString: String, withFormat format: String) -> String? {
+        
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+        
+        if let date = inputFormatter.date(from: dateString) {
+            
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = format
+            
+            return outputFormatter.string(from: date)
+        }
+        
+        return nil
     }
     
 }

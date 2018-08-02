@@ -12,18 +12,17 @@ class NewDetailsViewController: UIViewController,UIScrollViewDelegate {
 
     // :widget
     @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var img_back: UIImageView!
     @IBOutlet var img_view: UIImageView!
     @IBOutlet var txt_desc: UITextView!
     @IBOutlet var txt_title: UILabel!
+    @IBOutlet var txt_date: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //scrollView.delegate = self
-        //scrollView.isPagingEnabled = true
-
-        self.title = SysPara.NEWS_TITLE
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Grotesque MT", size: 15)!]
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#FFFFFF")
         
         print("SysPara.NEW_ROW_ID : \(String(describing: SysPara.NEW_ROW_ID))")
         print("SysPara.NEW_ROW_ID : \(String(describing: SysPara.NEWS_ID))")
@@ -40,14 +39,7 @@ class NewDetailsViewController: UIViewController,UIScrollViewDelegate {
         }
         txt_title.text = SysPara.NEWS_TITLE
         txt_desc.text = SysPara.NEWS_DESCRIPTION
-        //txt_desc.sizeToFit()
-        
-        //[self.txt_desc, setTextContainerInset,:UIEdgeInsetsMake(0, 12, 0, 12)]
-        //txt_desc.setTextContainerInset = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)
-        //img_view.isHidden = true
-        //self.txt_desc.contentInset = UIEdgeInsetsMake(-400.0, 0, 0, 0);
-        
-        txt_title.font = UIFont(name: "RNS Camelia", size: 14)!
+        txt_date.text = SysPara.NEWS_CREATED_AT
         
     }
 
@@ -68,6 +60,28 @@ class NewDetailsViewController: UIViewController,UIScrollViewDelegate {
         ContainerVC.modalTransitionStyle = .crossDissolve
         self.present(ContainerVC, animated: true, completion: { _ in })
         
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
 
 }

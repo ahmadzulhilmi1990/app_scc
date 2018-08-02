@@ -12,15 +12,24 @@ class SignUpViewController: UIViewController {
 
     // :widget
     @IBOutlet var btn_back: UIButton!
+    @IBOutlet var img_back: UIImageView!
     @IBOutlet var btn_submit: UIButton!
-    @IBOutlet var btn_tenant: UIButton!
-    @IBOutlet var btn_visitor: UIButton!
+    @IBOutlet var txt_tenant: UILabel!
+    @IBOutlet var txt_visitor: UILabel!
     @IBOutlet var email_input: UITextField!
     @IBOutlet var username_input: UITextField!
     @IBOutlet var password_input: UITextField!
+    @IBOutlet var box: UIView!
+    @IBOutlet var box_tenant: UIView!
+    @IBOutlet var box_visitor: UIView!
+    @IBOutlet var box_tnc: UILabel!
+    @IBOutlet var bar_username: UILabel!
+    @IBOutlet var bar_email: UILabel!
+    @IBOutlet var bar_password: UILabel!
     
     // :variable
     var guest: String!
+    var tnc: String!
     var email: String!
     var username: String!
     var password: String!
@@ -29,15 +38,64 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#42B4D0")
+        
+        email_input.backgroundColor = .clear
+        username_input.backgroundColor = .clear
+        password_input.backgroundColor = .clear
+        box.layer.cornerRadius = 10
+        box_tnc.layer.masksToBounds = true
+        box_tnc.layer.cornerRadius = 5
+        box_tenant.layer.cornerRadius = 5
+        box_visitor.layer.cornerRadius = 5
+        
         // :button btn_submit
-        btn_submit.backgroundColor = .clear
-        btn_submit.layer.cornerRadius = 20
-        btn_submit.layer.borderWidth = 1
-        btn_submit.layer.borderColor = UIColor.black.cgColor
+        btn_submit.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        btn_submit.layer.cornerRadius = 10
         
         // :default guest type
-        btn_tenant.backgroundColor = UIColor.lightGray
-        guest = "Tenant"
+        guest = "T"
+        
+        txt_tenant.textColor = hexStringToUIColor(hex: "#42B4D0")
+        box_tenant.backgroundColor = hexStringToUIColor(hex: "#FFFFFF")
+        box_visitor.backgroundColor = hexStringToUIColor(hex: "#EBEBEB")
+        
+        let gestureT = UITapGestureRecognizer(target: self, action:  #selector(self.someActionTenant))
+        self.box_tenant.addGestureRecognizer(gestureT)
+        
+        let gestureV = UITapGestureRecognizer(target: self, action:  #selector(self.someActionVisitor))
+        self.box_visitor.addGestureRecognizer(gestureV)
+        
+        username_input.addTarget(self, action: #selector(textFieldUsernameDidChange(_:)), for: .editingChanged)
+        
+        email_input.addTarget(self, action: #selector(textFieldEmailDidChange(_:)), for: .editingChanged)
+        
+        password_input.addTarget(self, action: #selector(textFieldPasswordDidChange(_:)), for: .editingChanged)
+        
+    }
+    
+    @objc func textFieldUsernameDidChange(_ textField: UITextField) {
+        bar_username.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+    }
+    
+    @objc func textFieldEmailDidChange(_ textField: UITextField) {
+        bar_username.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+        bar_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+    }
+    
+    @objc func textFieldPasswordDidChange(_ textField: UITextField) {
+        bar_username.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_password.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
+    }
+    
+    
+    @objc func checkAction(sender : UITapGestureRecognizer) {
+        // Do what you want
     }
     
     override func didReceiveMemoryWarning() {
@@ -45,23 +103,33 @@ class SignUpViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // :click lbl_tenant
-    @IBAction func setTenant(sender: AnyObject){
+    @objc func someActionTenant(_ sender:UITapGestureRecognizer){
+        // do other task
         guest = "T"
-        btn_tenant.backgroundColor = UIColor.lightGray
-        btn_visitor.backgroundColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1)
+        txt_tenant.textColor = hexStringToUIColor(hex: "#42B4D0")
+        txt_visitor.textColor = hexStringToUIColor(hex: "#000000")
+        box_tenant.backgroundColor = hexStringToUIColor(hex: "#FFFFFF")
+        box_visitor.backgroundColor = hexStringToUIColor(hex: "#EBEBEB")
     }
     
-    // :click lbl_visitor
-    @IBAction func setVisitor(sender: AnyObject){
+    @objc func someActionVisitor(_ sender:UITapGestureRecognizer){
+        // do other task
         guest = "V"
-        btn_tenant.backgroundColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1)
-        btn_visitor.backgroundColor = UIColor.lightGray
+        txt_tenant.textColor = hexStringToUIColor(hex: "#000000")
+        txt_visitor.textColor = hexStringToUIColor(hex: "#42B4D0")
+        box_tenant.backgroundColor = hexStringToUIColor(hex: "#EBEBEB")
+        box_visitor.backgroundColor = hexStringToUIColor(hex: "#FFFFFF")
     }
     
     // :click btn-back
     @IBAction func toSignInViewController(sender: AnyObject){
         SignInViewController()
+    }
+    
+    // :click btn-back
+    @IBAction func clickTermsAndConditions(sender: AnyObject){
+        tnc = "1"
+        box_tnc.backgroundColor = hexStringToUIColor(hex: "#42B4D0")
     }
     
     func SignInViewController() {
@@ -73,8 +141,21 @@ class SignUpViewController: UIViewController {
         
     }
     
+    func CreateProfileViewController() {
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let CreateProfileViewController = storyBoard.instantiateViewController(withIdentifier: "CreateProfileViewController") as! CreateProfileViewController
+        CreateProfileViewController.modalTransitionStyle = .crossDissolve
+        self.present(CreateProfileViewController, animated: true, completion: { _ in })
+        
+    }
+    
     // :click btn-submit
     @IBAction func toSubmit(sender: AnyObject){
+        
+        bar_username.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_email.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
+        bar_password.backgroundColor = hexStringToUIColor(hex: "#D6D6D6")
         
         if Connection.isConnectedToNetwork() == true {
             
@@ -84,9 +165,14 @@ class SignUpViewController: UIViewController {
             
             if(email.isEmpty == false && password.isEmpty == false && username.isEmpty == false){
                 
-                DispatchQueue.main.async {
-                    SwiftLoader.show(title: "please wait...",animated: true)
-                    self.POST(email: self.email, password: self.password, username: self.username, type: self.guest)
+                if(tnc != "1"){
+                    showDialog(description: "Terms and Conditions is required!",id: 0)
+                }else{
+                    onTapCustomAlertButton()
+                    /*DispatchQueue.main.async {
+                        SwiftLoader.show(title: "please wait...",animated: true)
+                        self.POST(email: self.email, password: self.password, username: self.username, type: self.guest)
+                    }*/
                 }
                 
             }else{
@@ -96,6 +182,7 @@ class SignUpViewController: UIViewController {
         }else{
             showDialog(description: SysPara.ERROR_NETWORK,id: 0)
         }
+ 
         
     }
     
@@ -179,6 +266,46 @@ class SignUpViewController: UIViewController {
         present(refreshAlert, animated: true, completion: nil)
     }
     
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
    
+    func onTapCustomAlertButton() {
+        let customAlert = self.storyboard?.instantiateViewController(withIdentifier: "DialogProfileViewController") as! DialogProfileViewController
+        customAlert.providesPresentationContextTransitionStyle = true
+        customAlert.definesPresentationContext = true
+        customAlert.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        customAlert.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+        customAlert.delegate = self
+        self.present(customAlert, animated: true, completion: nil)
+    }
 
+}
+
+extension SignUpViewController: DialogProfileDelegate {
+    func sureButtonTapped() {
+        //self.CreateProfileViewController()
+    }
+    
+    func cancelButtonTapped() {
+        print("cancelButtonTapped")
+    }
 }

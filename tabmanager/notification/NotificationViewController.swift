@@ -19,7 +19,7 @@ class NotificationViewController: TabVCTemplate,UITableViewDataSource, UITableVi
         selectedTab = 3
         // do stuff here
         self.title = "Notification"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
+        //self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "RNS Camelia", size: 15)!]
         
         txt_recent.font = UIFont(name: "RNS Camelia", size: 14)!
         

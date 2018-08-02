@@ -11,6 +11,9 @@ import UIKit
 
 struct SysPara {
     
+    /*** BASE COLOR ***/
+    static var BASE_COLOR = "#42B4D0"
+    
     /*** LOCATION DETAILS ***/
     static var LOC_ID = ""
     static var LOC_NAME = ""
@@ -35,6 +38,7 @@ struct SysPara {
     static var ARRAY_FOCUS_AREA: Array<Any>!
     static var ARRAY_EXPERIENCE_ROLE = ""
     static var ARRAY_COUNTRY = ""
+    static var ARRAY_FILTER_FOCUS_AREA = [String]()
     
     /*** NEW DETAILS ***/
     static var NEW_ROW_ID = ""
@@ -87,12 +91,14 @@ struct SysPara {
     static var USER_ID = ""
     static var USERNAME = ""
     static var VERIFY_TOKEN = ""
+    static var AVATAR_BASE64 = "AVATAR_BASE64"
     
     /*** VARIABLE ***/
     static var ERROR_NETWORK = "No Internet Connection. Make sure your device is connected to the internet."
     static var SUCCESS_UPDATE = "Successfully update data."
     static var SUCCESS_SIGNIN = "Success"
     static var ERROR_SIGNIN = "Failed to Sign In."
+    static var ALERT_APPROVED = " Are you sure to accept this user?"
 
     /*** API ***/
     
@@ -103,7 +109,7 @@ struct SysPara {
     static var API_CAROUSEL = URL + "carousel"
     static var API_CHANGE_PASSWORD = URL + "changepass/"
     static var API_LOGOUT = URL + "logout/"
-    static var API_UPDATE_PROFILE = URL + "profile/"
+    static var API_UPDATE_PROFILE = URL + "profile"
     static var API_NEWS = URL + "news/"
     static var API_GETALLDATA = URL + "getalldata"
     static var API_GEOFENCE = URL + "geofence/"
@@ -111,6 +117,7 @@ struct SysPara {
     static var API_CONNECTS_REQUEST = URL + "connect"
     static var API_CONNECTS_APPROVE = URL + "connect/approve"
     static var API_CONNECTS_REQUESTED = URL + "connect/requested/"
+    static var API_CONNECTS_REJECT = URL + "connect/reject/"
     static var API_SEARCH = URL + "search"
     static var API_USERDETAILS = URL + "userdetails/"
     

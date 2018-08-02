@@ -12,8 +12,10 @@ import UIKit
 class RowNews: UITableViewCell {
     
     @IBOutlet weak var txt_title: UILabel!
+    @IBOutlet weak var txt_date: UILabel!
     @IBOutlet weak var txt_desc: UILabel!
     @IBOutlet weak var img_view: UIImageView!
+    @IBOutlet weak var box: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

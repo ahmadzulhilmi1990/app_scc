@@ -18,17 +18,6 @@ class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        /*for family: String in UIFont.familyNames
-        {
-            print("\(family)")
-            for names: String in UIFont.fontNames(forFamilyName: family)
-            {
-                print("== \(names)")
-            }
-        }*/
-        
-        // Do any additional setup after loading the view.
         
         if Connection.isConnectedToNetwork() == true {
             
@@ -38,7 +27,7 @@ class SplashViewController: UIViewController {
             }
             
         }else{
-            showDialog(description: SysPara.ERROR_NETWORK)
+            showDialog(description: SysPara.ERROR_NETWORK, id: 0)
         }
     }
 
@@ -56,7 +45,7 @@ class SplashViewController: UIViewController {
             {
                 //SwiftLoader.hide()
                 print("error=\(String(describing: error))")
-                self.showDialog(description: String(describing: error))
+                self.showDialog(description: String(describing: error), id: 0)
                 return
             }
             do {
@@ -80,7 +69,7 @@ class SplashViewController: UIViewController {
             } catch {
                 //SwiftLoader.hide()
                 print(error)
-                self.showDialog(description: String(describing: error))
+                self.showDialog(description: String(describing: error), id:0)
             }
         }
         task.resume()
@@ -120,7 +109,7 @@ class SplashViewController: UIViewController {
             {
                 //SwiftLoader.hide()
                 print("error=\(String(describing: error))")
-                self.showDialog(description: String(describing: error))
+                self.showDialog(description: String(describing: error), id:0)
                 return
             }
             do {
@@ -144,18 +133,23 @@ class SplashViewController: UIViewController {
             } catch {
                 //SwiftLoader.hide()
                 print(error)
-                self.showDialog(description: String(describing: error))
+                self.showDialog(description: String(describing: error), id:0)
             }
         }
         task.resume()
         
     }
     
-    func showDialog(description: String!){
+    func showDialog(description: String!, id: Int!){
         let refreshAlert = UIAlertController(title: "Alert", message: description, preferredStyle: UIAlertControllerStyle.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-            self.CarouselViewController()
+            
+            if(id == 0){
+                exit(0)
+            }else{
+                self.CarouselViewController()
+            }
             
         }))
         

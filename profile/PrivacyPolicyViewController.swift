@@ -10,9 +10,12 @@ import UIKit
 
 class PrivacyPolicyViewController: UIViewController {
 
+    // :widget
+    @IBOutlet var txt_title: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
         // Do any additional setup after loading the view.
     }
 

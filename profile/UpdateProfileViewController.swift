@@ -33,15 +33,41 @@ class UpdateProfileViewController: UIViewController {
     @IBOutlet var txt_focus_area: UITextField!
     @IBOutlet var txt_about_me: UITextView!
     @IBOutlet var txt_country: UITextField!
-    @IBOutlet var txt_gender: UITextField!
+    @IBOutlet var txt_gender: UILabel!
+    @IBOutlet var btn_gender: UIButton!
     @IBOutlet var txt_email: UITextField!
     @IBOutlet var txt_contact_no: UITextField!
     @IBOutlet var txt_social_media: UITextView!
+   
+    @IBOutlet var lbl_header: UILabel!
+    @IBOutlet var lbl_title: UILabel!
+    @IBOutlet var lbl_company: UILabel!
+    @IBOutlet var lbl_role: UILabel!
+    @IBOutlet var lbl_focus_area: UILabel!
+    @IBOutlet var lbl_about_me: UILabel!
+    @IBOutlet var lbl_country: UILabel!
+    @IBOutlet var lbl_gender: UILabel!
+    @IBOutlet var lbl_email: UILabel!
+    @IBOutlet var lbl_contact_no: UILabel!
+    @IBOutlet var lbl_social_media: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        txt_username.text = SysPara.USERNAME
+        txt_username.text = "Hi " + SysPara.USERNAME
+        lbl_header?.font = UIFont(name: "RNS Camelia", size: 14)!
+        txt_username?.font = UIFont(name: "RNS Camelia", size: 16)!
+        
+        lbl_title?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_company?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_role?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_focus_area?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_about_me?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_country?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_gender?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_email?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_contact_no?.font = UIFont(name: "RNS Camelia", size: 12)!
+        lbl_social_media?.font = UIFont(name: "RNS Camelia", size: 12)!
         
         // :button home
         btn_save.backgroundColor = .clear
@@ -59,8 +85,13 @@ class UpdateProfileViewController: UIViewController {
         txt_social_media.layer.borderWidth = 1
         txt_social_media.layer.borderColor = UIColor.gray.cgColor
         
+        // :btn-gender
+        btn_gender.layer.cornerRadius = 5
+        btn_gender.layer.borderWidth = 1
+        btn_gender.layer.borderColor = UIColor.gray.cgColor
+        
         //self.scrollview.frame = self.view.bounds;
-        self.scrollview.contentSize.height = 1300;
+        self.scrollview.contentSize.height = 950;
         
         // :setting label-data
         txt_title.text = ""
@@ -69,7 +100,8 @@ class UpdateProfileViewController: UIViewController {
         txt_focus_area.text = ""
         txt_about_me.text = SysPara.ABOUT_ME
         txt_country.text = SysPara.COUNTRY_CODE
-        txt_gender.text = SysPara.GENDER
+        //txt_gender.text = SysPara.GENDER
+        btn_gender.titleLabel?.text = SysPara.GENDER
         txt_email.text = SysPara.USER_EMAIL
         txt_contact_no.text = SysPara.PHONE_NO
         txt_social_media.text = SysPara.FACEBOOK + "\n" + SysPara.INSTAGRAM
@@ -292,6 +324,30 @@ class UpdateProfileViewController: UIViewController {
         let SignInViewController = storyBoard.instantiateViewController(withIdentifier: "SignInViewController") as! SignInViewController
         SignInViewController.modalTransitionStyle = .crossDissolve
         self.present(SignInViewController, animated: true, completion: { _ in })
+        
+    }
+    
+    @IBAction func selectGender(sender: AnyObject){
+        
+        let alert = UIAlertController(title: "Gender", message: "Please Select an Option", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Male", style: .default , handler:{ (UIAlertAction)in
+            print("Male")
+            self.txt_gender.text = "Male"
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Female", style: .default , handler:{ (UIAlertAction)in
+            print("Female")
+            self.txt_gender.text = "Female"
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler:{ (UIAlertAction)in
+            print("User click Dismiss button")
+        }))
+        
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
         
     }
 
