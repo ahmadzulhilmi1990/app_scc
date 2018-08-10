@@ -15,13 +15,17 @@ class SettingsViewController: UIViewController {
     @IBOutlet var alarm_update: UISwitch!
     @IBOutlet var alarm_location: UISwitch!
     @IBOutlet var txt_title: UILabel!
+    @IBOutlet var img_back: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
+        
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#FFFFFF")
         // Do any additional setup after loading the view.
         
-        txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
+        //txt_title?.font = UIFont(name: "RNS Camelia", size: 14)!
         
         alarm_message.addTarget(self, action: #selector(switch_message), for: UIControlEvents.valueChanged)
         
@@ -78,14 +82,35 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
-    */
+    
+    // :click btn-back
+    @IBAction func toBack(sender: AnyObject){
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let ContainerVC = storyBoard.instantiateViewController(withIdentifier: "ContainerVC") as! ContainerVC
+        ContainerVC.modalTransitionStyle = .crossDissolve
+        self.present(ContainerVC, animated: true, completion: { _ in })
+    }
 
 }

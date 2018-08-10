@@ -42,8 +42,12 @@
 		CE643A2E20DFF0D300C4AD1E /* ic_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = CE643A2B20DFF0C100C4AD1E /* ic_profile.png */; };
 		CE643A3620DFF34000C4AD1E /* CustomAlertDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE643A3520DFF34000C4AD1E /* CustomAlertDialogViewController.swift */; };
 		CE643A3820DFF48000C4AD1E /* CustomAlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE643A3720DFF48000C4AD1E /* CustomAlertViewDelegate.swift */; };
+		CE66B0F1211B3A2200725B64 /* ExperienceRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE66B0F0211B3A2200725B64 /* ExperienceRole.swift */; };
+		CE66B0F3211B3F6000725B64 /* RowExperienceRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE66B0F2211B3F6000725B64 /* RowExperienceRole.swift */; };
+		CE66B0F7211B43E100725B64 /* icon_call.png in Resources */ = {isa = PBXBuildFile; fileRef = CE66B0F4211B43D800725B64 /* icon_call.png */; };
+		CE66B0F8211B43E100725B64 /* icon_message.png in Resources */ = {isa = PBXBuildFile; fileRef = CE66B0F5211B43D900725B64 /* icon_message.png */; };
+		CE66B0F9211B43E100725B64 /* icon_email.png in Resources */ = {isa = PBXBuildFile; fileRef = CE66B0F6211B43DD00725B64 /* icon_email.png */; };
 		CE72AC962112285E00F4948A /* RowInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72AC952112285E00F4948A /* RowInterest.swift */; };
-		CE72AC9821122C5700F4948A /* ic_green.png in Resources */ = {isa = PBXBuildFile; fileRef = CE72AC9721122C5300F4948A /* ic_green.png */; };
 		CE7423E32100A9490040B39A /* AttachmentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7423E22100A9490040B39A /* AttachmentHandler.swift */; };
 		CEA13EF520B29D5200D732FD /* TabManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA13EF420B29D5200D732FD /* TabManagerViewController.swift */; };
 		CEA6951A20B7289300E48978 /* FocusArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA6951920B7289300E48978 /* FocusArea.swift */; };
@@ -153,8 +157,12 @@
 		CE643A2B20DFF0C100C4AD1E /* ic_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_profile.png; sourceTree = "<group>"; };
 		CE643A3520DFF34000C4AD1E /* CustomAlertDialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertDialogViewController.swift; sourceTree = "<group>"; };
 		CE643A3720DFF48000C4AD1E /* CustomAlertViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewDelegate.swift; sourceTree = "<group>"; };
+		CE66B0F0211B3A2200725B64 /* ExperienceRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceRole.swift; sourceTree = "<group>"; };
+		CE66B0F2211B3F6000725B64 /* RowExperienceRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowExperienceRole.swift; sourceTree = "<group>"; };
+		CE66B0F4211B43D800725B64 /* icon_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_call.png; path = "../../rauvetech/Res/Icon (WIP)/2x/icon_call.png"; sourceTree = "<group>"; };
+		CE66B0F5211B43D900725B64 /* icon_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_message.png; path = "../../rauvetech/Res/Icon (WIP)/2x/icon_message.png"; sourceTree = "<group>"; };
+		CE66B0F6211B43DD00725B64 /* icon_email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_email.png; path = "../../rauvetech/Res/Icon (WIP)/2x/icon_email.png"; sourceTree = "<group>"; };
 		CE72AC952112285E00F4948A /* RowInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowInterest.swift; sourceTree = "<group>"; };
-		CE72AC9721122C5300F4948A /* ic_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_green.png; path = ../../ic_green.png; sourceTree = "<group>"; };
 		CE7423E22100A9490040B39A /* AttachmentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHandler.swift; sourceTree = "<group>"; };
 		CE7423E42100AD1C0040B39A /* SupplyChainCity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SupplyChainCity.entitlements; sourceTree = "<group>"; };
 		CEA13EF420B29D5200D732FD /* TabManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerViewController.swift; sourceTree = "<group>"; };
@@ -254,7 +262,9 @@
 		CEC542BC20A44E25008C7935 /* drawable */ = {
 			isa = PBXGroup;
 			children = (
-				CE72AC9721122C5300F4948A /* ic_green.png */,
+				CE66B0F4211B43D800725B64 /* icon_call.png */,
+				CE66B0F6211B43DD00725B64 /* icon_email.png */,
+				CE66B0F5211B43D900725B64 /* icon_message.png */,
 				CE458CF6210905BE001E61DB /* icon_action_dropped_down.png */,
 				CE5C86852104A028002BFD34 /* ic_fb.png */,
 				CE5C86862104A02B002BFD34 /* ic_insta.png */,
@@ -356,6 +366,7 @@
 				CEA6951920B7289300E48978 /* FocusArea.swift */,
 				CE4A1CED20EC9407003F0154 /* Users.swift */,
 				CE458CF42109020D001E61DB /* CollectionCountry.swift */,
+				CE66B0F0211B3A2200725B64 /* ExperienceRole.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -426,6 +437,7 @@
 				CE5E849120ED45620059B108 /* RowFilter.swift */,
 				CE25FEE6210F82FF0046B176 /* FilterDataViewController.swift */,
 				CE72AC952112285E00F4948A /* RowInterest.swift */,
+				CE66B0F2211B3F6000725B64 /* RowExperienceRole.swift */,
 			);
 			path = connect;
 			sourceTree = "<group>";
@@ -648,6 +660,8 @@
 			files = (
 				CE4699A520E1009D00B4EDEA /* avatar.png in Resources */,
 				CE458CF7210905C3001E61DB /* icon_action_dropped_down.png in Resources */,
+				CE66B0F8211B43E100725B64 /* icon_message.png in Resources */,
+				CE66B0F7211B43E100725B64 /* icon_call.png in Resources */,
 				CEC5432420A4CF1E008C7935 /* RNS_Camelia.otf in Resources */,
 				CE0CD9AE2101E29F0094ECC4 /* onboard3.png in Resources */,
 				CEC5432520A4CF1E008C7935 /* GrotesqueMT.otf in Resources */,
@@ -675,9 +689,9 @@
 				CE5C86892104A033002BFD34 /* ic_insta.png in Resources */,
 				CE0CD9B02101E4620094ECC4 /* onboard1.png in Resources */,
 				CEC5431620A4ACBD008C7935 /* ic_tnc.png in Resources */,
-				CE72AC9821122C5700F4948A /* ic_green.png in Resources */,
 				CE5E848E20ED39280059B108 /* ic_reset_filter.png in Resources */,
 				CEC542CA20A44E46008C7935 /* ic_menu.png in Resources */,
+				CE66B0F9211B43E100725B64 /* icon_email.png in Resources */,
 				FCDFC08E1B2F7F120015115E /* Images.xcassets in Resources */,
 				CE5E849020ED44D00059B108 /* ic_tick.png in Resources */,
 				CEC5431820A4ACBD008C7935 /* ic_policy.png in Resources */,
@@ -758,7 +772,9 @@
 				CE72AC962112285E00F4948A /* RowInterest.swift in Sources */,
 				CEFCAE9D20AE75C500B7A883 /* News.swift in Sources */,
 				CEC5430E20A4AAE8008C7935 /* CustomModeLabel.swift in Sources */,
+				CE66B0F1211B3A2200725B64 /* ExperienceRole.swift in Sources */,
 				CE5E849620ED4C520059B108 /* BlockViewController.swift in Sources */,
+				CE66B0F3211B3F6000725B64 /* RowExperienceRole.swift in Sources */,
 				CE643A3820DFF48000C4AD1E /* CustomAlertViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -922,7 +938,7 @@
 				DEVELOPMENT_TEAM = SJSPQT8937;
 				INFOPLIST_FILE = LeftSlideoutMenu/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.supplychaincity.events;
+				PRODUCT_BUNDLE_IDENTIFIER = com.supplychaincity.scc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0c1d1ea1-a74d-4f3a-a66f-fcb79bf059a5";
 				PROVISIONING_PROFILE_SPECIFIER = "SUPPLY CHAIN CITY DEV";
@@ -943,7 +959,7 @@
 				DEVELOPMENT_TEAM = SJSPQT8937;
 				INFOPLIST_FILE = LeftSlideoutMenu/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.supplychaincity.events;
+				PRODUCT_BUNDLE_IDENTIFIER = com.supplychaincity.scc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "143f86cf-842b-4f2e-b6ce-a6cad857291f";
 				PROVISIONING_PROFILE_SPECIFIER = "SUPPLY CHAIN CITY DEV";

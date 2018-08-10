@@ -39,6 +39,8 @@ struct SysPara {
     static var ARRAY_EXPERIENCE_ROLE = ""
     static var ARRAY_COUNTRY = ""
     static var ARRAY_FILTER_FOCUS_AREA = [String]()
+    static var ARRAY_FILTER_INDUSTRY = [String]()
+    static var ARRAY_FILTER_EXPERIENCE_ROLE = [String]()
     
     /*** NEW DETAILS ***/
     static var NEW_ROW_ID = ""
@@ -91,6 +93,8 @@ struct SysPara {
     static var USER_ID = ""
     static var USERNAME = ""
     static var VERIFY_TOKEN = ""
+    static var POSITION = ""
+    static var COMPANY = ""
     static var AVATAR_BASE64 = "AVATAR_BASE64"
     
     /*** VARIABLE ***/

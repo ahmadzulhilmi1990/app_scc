@@ -12,11 +12,15 @@ class FilterDataViewController: UIViewController,UICollectionViewDataSource,UICo
     
     // :variable
     var collection_focus_area: [FocusArea] = []
+    var collection_experience_role: [ExperienceRole] = []
     
     // :widget
     @IBOutlet weak var myCollection: UICollectionView!
+    @IBOutlet weak var myCollectionRole: UICollectionView!
     @IBOutlet var img_back: UIImageView!
+    @IBOutlet var img_new_users: UIImageView!
     @IBOutlet weak var btn_save: UIButton!
+    @IBOutlet weak var btn_reset: UIButton!
     @IBOutlet var interest_input: UITextField!
     @IBOutlet var bar_interest: UILabel!
     
@@ -33,6 +37,34 @@ class FilterDataViewController: UIViewController,UICollectionViewDataSource,UICo
         interest_input.addTarget(self, action: #selector(textFieldEmailDidChange(_:)), for: .editingChanged)
         
         onGenerateFocusAreaData()
+        onGenerateExperienceRoleData()
+        
+        print("ARRAY_FILTER_INDUSTRY = \(SysPara.ARRAY_FILTER_INDUSTRY)")
+        print("ARRAY_FILTER_EXPERIENCE_ROLE = \(SysPara.ARRAY_FILTER_EXPERIENCE_ROLE)")
+        
+        if let filter_user = KeychainWrapper.standardKeychainAccess().string(forKey: "filter_user") {
+            
+            print(filter_user)
+            if(filter_user == "new"){
+                
+                self.img_new_users.image = self.img_new_users.image!.withRenderingMode(.alwaysTemplate)
+                self.img_new_users.tintColor = hexStringToUIColor(hex: "#42B4D0")
+                
+                btn_reset.setTitle("Reset", for: UIControlState.normal)
+                
+                // :SETTINGS FILTER_USER
+                KeychainWrapper.standardKeychainAccess().setString("new", forKey: "filter_user")
+                
+            }else{ //all
+                self.img_new_users.image = self.img_new_users.image!.withRenderingMode(.alwaysTemplate)
+                self.img_new_users.tintColor = hexStringToUIColor(hex: "#000000")
+                
+                btn_reset.setTitle("All", for: UIControlState.normal)
+                
+                // :SETTINGS FILTER_USER
+                KeychainWrapper.standardKeychainAccess().setString("all", forKey: "filter_user")
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,51 +105,196 @@ class FilterDataViewController: UIViewController,UICollectionViewDataSource,UICo
         }
     }
     
+    func onGenerateExperienceRoleData(){
+        let data = SysPara.ARRAY_ALL_DATA
+        if let arr = data {
+            let role = arr["experience_role"] as? [[String:Any]]
+            
+            print("role : \(String(describing: role))")
+            
+            for anItem in role! {
+                
+                let role_id = anItem["id"] as AnyObject
+                let role_name = anItem["role_name"] as AnyObject
+                let role_code = anItem["role_code"] as AnyObject
+                print("role_id : \(String(describing: role_id))")
+                print("role_name : \(String(describing: role_name))")
+                print("role_code : \(String(describing: role_code))")
+                
+                let arr_role = ExperienceRole(id: String(describing: role_id),role_name: String(describing: role_name),role_code: String(describing: role_code))
+                
+                print(arr_role)
+                collection_experience_role.append(arr_role)
+                DispatchQueue.main.async { self.myCollectionRole.reloadData() }
+                
+            }
+            
+            print(collection_experience_role.count)
+            
+        }
+    }
+    
     /*********************** START TABLE ******************************/
     let reuseIdentifier = "RowInterest"
+    let reuseIdentifierRole = "RowExperienceRole"
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collection_focus_area.count
+        
+        var x = 0
+        if collectionView == self.myCollection {
+            x = collection_focus_area.count
+        }
+        
+        if collectionView == self.myCollectionRole {
+            x = collection_experience_role.count
+        }
+        return x
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-   /* func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        let numberOfItems = CGFloat(collectionView.numberOfItems(inSection: section))
-        let combinedItemWidth = (numberOfItems * flowLayout.itemSize.width) + ((numberOfItems - 1)  * flowLayout.minimumInteritemSpacing)
-        let padding = (collectionView.frame.width - combinedItemWidth) / 2
-        return UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-    }*/
     
     // make a cell for each cell index path
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        // Getting the right element
-        let model = collection_focus_area[indexPath.row]
+        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
         
-        // get a reference to our storyboard cell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
+        if collectionView == self.myCollection {
         
-        cell.txt_title.text = model.focus_name
-        print(model.focus_name)
+                // Getting the right element
+                let model = collection_focus_area[indexPath.row]
+        
+                // get a reference to our storyboard cell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
+        
+            cell.txt_title.text = model.focus_name
+            print(model.focus_name)
+        
+            let arr = SysPara.ARRAY_FILTER_INDUSTRY
+            print(arr)
+        
+            if arr.contains(model.focus_code!) {
+                cell.avatar.image = cell.avatar.image!.withRenderingMode(.alwaysTemplate)
+                cell.avatar.tintColor = hexStringToUIColor(hex: "#42B4D0")
+            }else{
+                cell.avatar.image = cell.avatar.image!.withRenderingMode(.alwaysTemplate)
+                cell.avatar.tintColor = UIColor.gray
+            }
+        }
+        
+        if collectionView == self.myCollectionRole {
+            
+            // Getting the right element
+            let model = collection_experience_role[indexPath.row]
+            
+            // get a reference to our storyboard cell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier:reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
+            
+            cell.txt_title.text = model.role_name
+            print(model.role_name)
+            
+        }
         
         return cell
         
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if collectionView == self.myCollection {
+        
         // handle tap events
         let model = collection_focus_area[indexPath.row]
+        let name = model.focus_name
+        let fcode = model.focus_code
+        
+        let arr = SysPara.ARRAY_FILTER_INDUSTRY
+        if(arr.isEmpty){
+            print("ADDED!")
+            SysPara.ARRAY_FILTER_INDUSTRY.append(fcode as String!)
+        }else{
+            for id in arr {
+                if(model.focus_code == id){ // remove from filter
+                    print("REMOVE!")
+                    SysPara.ARRAY_FILTER_INDUSTRY = SysPara.ARRAY_FILTER_INDUSTRY.filter { $0 != id }
+                }else{ // added filter
+                    print("ADDED!")
+                    SysPara.ARRAY_FILTER_INDUSTRY.append(fcode as String!)
+                }
+            }
+        }
+        
+        //DispatchQueue.main.async { self.tableView.reloadData() }
+        DispatchQueue.main.async {
+            print("ARRAY_FILTER_FOCUS_AREA = \(SysPara.ARRAY_FILTER_INDUSTRY)")
+            self.collection_focus_area.removeAll()
+            self.onGenerateFocusAreaData()
+        }
+            
+        }
+        
+        if collectionView == self.myCollectionRole {
+            
+            // handle tap events
+            let model = collection_experience_role[indexPath.row]
+            let name = model.role_name
+            let rcode = model.role_code
+            
+            let arr = SysPara.ARRAY_FILTER_EXPERIENCE_ROLE
+            if(arr.isEmpty){
+                print("ADDED!")
+                SysPara.ARRAY_FILTER_EXPERIENCE_ROLE.append(rcode as String!)
+            }else{
+                for id in arr {
+                    if(model.role_code == id){ // remove from filter
+                        print("REMOVE!")
+                        SysPara.ARRAY_FILTER_EXPERIENCE_ROLE = SysPara.ARRAY_FILTER_EXPERIENCE_ROLE.filter { $0 != id }
+                    }else{ // added filter
+                        print("ADDED!")
+                        SysPara.ARRAY_FILTER_EXPERIENCE_ROLE.append(rcode as String!)
+                    }
+                }
+            }
+            
+            //DispatchQueue.main.async { self.tableView.reloadData() }
+            DispatchQueue.main.async {
+                print("ARRAY_FILTER_EXPERIENCE_ROLE = \(SysPara.ARRAY_FILTER_EXPERIENCE_ROLE)")
+                self.collection_experience_role.removeAll()
+                self.onGenerateExperienceRoleData()
+            }
+            
+        }
         
     }
     
     /*********************** END TABLE ******************************/
     
+    
+    
     // :click btn-back
     @IBAction func toBack(sender: AnyObject){
         TabManagerViewController()
+    }
+    
+    @IBAction func clickNewUsers(sender: AnyObject){
+        self.img_new_users.image = self.img_new_users.image!.withRenderingMode(.alwaysTemplate)
+        self.img_new_users.tintColor = hexStringToUIColor(hex: "#42B4D0")
+        
+        btn_reset.setTitle("Reset", for: UIControlState.normal)
+        
+        // :SETTINGS FILTER_USER
+        KeychainWrapper.standardKeychainAccess().setString("new", forKey: "filter_user")
+    }
+    
+    @IBAction func clickReset(sender: AnyObject){
+        self.img_new_users.image = self.img_new_users.image!.withRenderingMode(.alwaysTemplate)
+        self.img_new_users.tintColor = hexStringToUIColor(hex: "#000000")
+        
+        btn_reset.setTitle("All", for: UIControlState.normal)
+        
+        // :SETTINGS FILTER_USER
+        KeychainWrapper.standardKeychainAccess().setString("all", forKey: "filter_user")
     }
     
     func TabManagerViewController() {

@@ -30,7 +30,7 @@ class ChangePasswordViewController: UIViewController {
         oldpass_input.backgroundColor = .clear
         
         self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
-        self.img_back.tintColor = hexStringToUIColor(hex: "#42B4D0")
+        self.img_back.tintColor = hexStringToUIColor(hex: "#FFFFFF")
         
         // :button reset-password
         //btn_reset_password.backgroundColor = .clear

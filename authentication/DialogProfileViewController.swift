@@ -14,6 +14,7 @@ class DialogProfileViewController: UIViewController {
     @IBOutlet weak var alertView: UIView!
     @IBOutlet weak var btn_sure: UIButton!
     @IBOutlet weak var btn_later: UIButton!
+    @IBOutlet weak var lbl_header: UILabel!
     
     // :variable
     var delegate: DialogProfileDelegate?
@@ -23,6 +24,7 @@ class DialogProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        lbl_header.text = "Welcome,"+SysPara.FULLNAME
         // Do any additional setup after loading the view.
         
     }
@@ -58,8 +60,9 @@ class DialogProfileViewController: UIViewController {
     }
     
     @IBAction func onTapCancelButton(_ sender: Any) {
-        delegate?.cancelButtonTapped()
-        self.dismiss(animated: true, completion: nil)
+        //delegate?.cancelButtonTapped()
+        //self.dismiss(animated: true, completion: nil)
+        self.TabManagerViewController()
     }
     
     @IBAction func sureButtonTapped(_ sender: Any) {
@@ -74,6 +77,15 @@ class DialogProfileViewController: UIViewController {
         let CreateProfileViewController = storyBoard.instantiateViewController(withIdentifier: "CreateProfileViewController") as! CreateProfileViewController
         CreateProfileViewController.modalTransitionStyle = .crossDissolve
         self.present(CreateProfileViewController, animated: true, completion: { _ in })
+        
+    }
+    
+    func TabManagerViewController() {
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let ContainerVC = storyBoard.instantiateViewController(withIdentifier: "ContainerVC") as! ContainerVC
+        ContainerVC.modalTransitionStyle = .crossDissolve
+        self.present(ContainerVC, animated: true, completion: { _ in })
         
     }
     

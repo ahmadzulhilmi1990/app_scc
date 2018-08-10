@@ -8,44 +8,30 @@
 
 import UIKit
 
-class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
+class UserDetailsViewController: UIViewController, UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate {
 
+    // :variable
+    var collection_focus_area: [FocusArea] = []
+    var collection_experience_role: [ExperienceRole] = []
+    
     // :widget
-    @IBOutlet var btn_block_user: UIButton!
-    @IBOutlet var btn_invite_friends: UIButton!
+    @IBOutlet weak var myCollection: UICollectionView!
+    @IBOutlet weak var myCollectionRole: UICollectionView!
+    @IBOutlet var img_back: UIImageView!
+    @IBOutlet var avatar: UIImageView!
     @IBOutlet var btn_message: UIButton!
     @IBOutlet var btn_call: UIButton!
     @IBOutlet var btn_email: UIButton!
-    @IBOutlet var btn_edit_profile: UIButton!
-    @IBOutlet var btn_logout: UIButton!
-    @IBOutlet var btn_home: UIButton!
     @IBOutlet var txt_username: UILabel!
     @IBOutlet var txt_works: UILabel!
     @IBOutlet var scrollview: UIScrollView!
-    @IBOutlet var txt_title: UILabel!
-    @IBOutlet var txt_company: UILabel!
-    @IBOutlet var txt_role: UILabel!
-    @IBOutlet var txt_focus_area: UILabel!
-    @IBOutlet var txt_about_me: UILabel!
     @IBOutlet var txt_country: UILabel!
     @IBOutlet var txt_gender: UILabel!
     @IBOutlet var txt_email: UILabel!
     @IBOutlet var txt_contact_no: UILabel!
-    @IBOutlet var txt_social_media: UILabel!
-    @IBOutlet var txt_title_header: UILabel!
-    @IBOutlet var lbl_title: UILabel!
-    @IBOutlet var lbl_company: UILabel!
-    @IBOutlet var lbl_role: UILabel!
-    @IBOutlet var lbl_focus_area: UILabel!
-    @IBOutlet var lbl_about_me: UILabel!
-    @IBOutlet var lbl_country: UILabel!
-    @IBOutlet var lbl_gender: UILabel!
-    @IBOutlet var lbl_email: UILabel!
-    @IBOutlet var lbl_contact_no: UILabel!
-    @IBOutlet var lbl_social_media: UILabel!
-    @IBOutlet var txt_btn_message: UILabel!
-    @IBOutlet var txt_btn_call: UILabel!
-    @IBOutlet var txt_btn_email: UILabel!
+    @IBOutlet var txt_social_media_fb: UILabel!
+    @IBOutlet var txt_social_media_linked: UILabel!
+    @IBOutlet var txt_social_media_insta: UILabel!
     @IBOutlet var txt_description: UILabel!
     
     override func viewDidLoad() {
@@ -54,52 +40,12 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
 
         // Do any additional setup after loading the view.
         
-        self.scrollview.contentSize.height = 950;
+        self.scrollview.contentSize.height = 850;
         
-        //txt_about_me.sizeToFit()
-        //txt_social_media.sizeToFit()
+        self.img_back.image = self.img_back.image!.withRenderingMode(.alwaysTemplate)
+        self.img_back.tintColor = hexStringToUIColor(hex: "#FFFFFF")
         
-        txt_title_header?.font = UIFont(name: "RNS Camelia", size: 14)!
-        txt_username?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_works?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_title?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_company?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_role?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_focus_area?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_about_me?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_country?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_gender?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_email?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_contact_no?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_social_media?.font = UIFont(name: "RNS Camelia", size: 12)!
-        
-        lbl_title?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_company?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_role?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_focus_area?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_about_me?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_country?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_gender?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_email?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_contact_no?.font = UIFont(name: "RNS Camelia", size: 12)!
-        lbl_social_media?.font = UIFont(name: "RNS Camelia", size: 12)!
-        
-        txt_btn_message?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_btn_call?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_btn_email?.font = UIFont(name: "RNS Camelia", size: 12)!
-        txt_description?.font = UIFont(name: "RNS Camelia", size: 12)!
-        
-        // :button btn-block-users
-        btn_block_user.backgroundColor = .clear
-        btn_block_user.layer.borderWidth = 1
-        btn_block_user.layer.cornerRadius = 8
-        btn_block_user.layer.borderColor = UIColor.gray.cgColor
-        
-        // :button btn-invite-frinds
-        btn_invite_friends.backgroundColor = .clear
-        btn_invite_friends.layer.borderWidth = 1
-        btn_invite_friends.layer.cornerRadius = 8
-        btn_invite_friends.layer.borderColor = UIColor.gray.cgColor
+        //txt_title_header?.font = UIFont(name: "RNS Camelia", size: 14)!
         
         if Connection.isConnectedToNetwork() == true {
             
@@ -112,6 +58,18 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
             showDialog(description: SysPara.ERROR_NETWORK,id: 0)
         }
         
+        onGenerateFocusAreaData()
+        onGenerateExperienceRoleData()
+        
+        print("ARRAY_FILTER_INDUSTRY = \(SysPara.ARRAY_FILTER_INDUSTRY)")
+        print("ARRAY_FILTER_EXPERIENCE_ROLE = \(SysPara.ARRAY_FILTER_EXPERIENCE_ROLE)")
+        
+        avatar.layer.borderWidth = 1
+        avatar.layer.masksToBounds = false
+        avatar.layer.borderColor = UIColor.gray.cgColor
+        avatar.layer.cornerRadius = 25
+        avatar.clipsToBounds = true
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -121,6 +79,38 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
     
     @IBAction func toBack(sender: AnyObject){
         TabManagerViewController()
+    }
+    
+    @IBAction func clickCall(sender: AnyObject){
+        var num = txt_contact_no.text
+        if((num?.characters.count)! > 0){
+            //UIApplication.sharedApplication().openURL(NSURL(string: "tel://9809088798")!)
+            if let url = URL(string: "tel//:\(num)") {
+                if #available(iOS 10, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url as URL)
+                }
+            }
+        }else{
+            showDialog(description: "Invalid Phone Number.",id: 0)
+        }
+        
+    }
+    
+    @IBAction func clickEmail(sender: AnyObject){
+        var email = txt_email.text
+        guard let url = URL(string: "mailto:\(email)") else { return }
+        
+        if((email?.characters.count)! > 0){
+            UIApplication.shared.openURL(url)
+        }else{
+            showDialog(description: "Invalid Email Address.",id: 0)
+        }
+    }
+    
+    @IBAction func clickMessage(sender: AnyObject){
+    
     }
     
     func TabManagerViewController() {
@@ -218,13 +208,19 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
                 // :settting value to text or label
                 txt_username.text = fullname
                 txt_email.text = email
-                txt_country.text = country_code
-                txt_about_me.text = about_me
-                txt_gender.text = gender
                 txt_contact_no.text = phone_no
-                txt_social_media.text = facebook + "\n" + instagram + "\n" + linkedIn
-                txt_focus_area.text = focus_code
-                txt_role.text = role_code
+                txt_social_media_fb.text = facebook
+                txt_social_media_linked.text = linkedIn
+                txt_social_media_insta.text = instagram
+                txt_description.text = about_me
+                
+                if(gender == "M"){
+                    txt_gender.text = "Male"
+                }else{
+                    txt_gender.text = "Female"
+                }
+                
+                onGenerateCountryData(text: country_code)
             }
             
         }
@@ -242,5 +238,171 @@ class UserDetailsViewController: UIViewController, UIScrollViewDelegate {
         
         present(refreshAlert, animated: true, completion: nil)
     }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    func onGenerateCountryData(text : String){
+        let data = SysPara.ARRAY_ALL_DATA
+        if let arr = data {
+            let country = arr["country"] as? [[String:Any]]
+            
+            print("country : \(String(describing: country))")
+            
+            for anItem in country! {
+                
+                let country_id = anItem["id"] as AnyObject
+                let country_name = anItem["country_name"] as AnyObject
+                let country_code = anItem["country_code"] as AnyObject
+                let country_phone_code = anItem["country_phone_code"] as AnyObject
+                
+                if(text == country_code as! String){
+                    txt_country.text = country_name as! String
+                }
+                
+            }
+            
+        }
+    }
+    
+    func onGenerateFocusAreaData(){
+        let data = SysPara.ARRAY_ALL_DATA
+        if let arr = data {
+            let focus_area = arr["focus_area"] as? [[String:Any]]
+            
+            print("focus_area : \(String(describing: focus_area))")
+            
+            for anItem in focus_area! {
+                
+                let focus_id = anItem["id"] as AnyObject
+                let focus_name = anItem["focus_name"] as AnyObject
+                let focus_code = anItem["focus_code"] as AnyObject
+                print("focus_id : \(String(describing: focus_id))")
+                print("focus_name : \(String(describing: focus_name))")
+                print("focus_code : \(String(describing: focus_code))")
+                
+                let arr_focus_area = FocusArea(id: String(describing: focus_id),focus_name: String(describing: focus_name),focus_code: String(describing: focus_code))
+                
+                print(arr_focus_area)
+                collection_focus_area.append(arr_focus_area)
+                DispatchQueue.main.async { self.myCollection.reloadData() }
+                
+            }
+            
+            print(collection_focus_area.count)
+            
+        }
+    }
+    
+    func onGenerateExperienceRoleData(){
+        let data = SysPara.ARRAY_ALL_DATA
+        if let arr = data {
+            let role = arr["experience_role"] as? [[String:Any]]
+            
+            print("role : \(String(describing: role))")
+            
+            for anItem in role! {
+                
+                let role_id = anItem["id"] as AnyObject
+                let role_name = anItem["role_name"] as AnyObject
+                let role_code = anItem["role_code"] as AnyObject
+                print("role_id : \(String(describing: role_id))")
+                print("role_name : \(String(describing: role_name))")
+                print("role_code : \(String(describing: role_code))")
+                
+                let arr_role = ExperienceRole(id: String(describing: role_id),role_name: String(describing: role_name),role_code: String(describing: role_code))
+                
+                print(arr_role)
+                collection_experience_role.append(arr_role)
+                DispatchQueue.main.async { self.myCollectionRole.reloadData() }
+                
+            }
+            
+            print(collection_experience_role.count)
+            
+        }
+    }
+    
+    /*********************** START TABLE ******************************/
+    let reuseIdentifier = "RowInterest"
+    let reuseIdentifierRole = "RowExperienceRole"
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        var x = 0
+        if collectionView == self.myCollection {
+            x = collection_focus_area.count
+        }
+        
+        if collectionView == self.myCollectionRole {
+            x = collection_experience_role.count
+        }
+        return x
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    
+    // make a cell for each cell index path
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
+        
+        if collectionView == self.myCollection {
+            
+            // Getting the right element
+            let model = collection_focus_area[indexPath.row]
+            
+            // get a reference to our storyboard cell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
+            
+            cell.txt_title.text = model.focus_name
+            print(model.focus_name)
+            
+        }
+        
+        if collectionView == self.myCollectionRole {
+            
+            // Getting the right element
+            let model = collection_experience_role[indexPath.row]
+            
+            // get a reference to our storyboard cell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier:reuseIdentifier, for: indexPath as IndexPath) as! RowInterest
+            
+            cell.txt_title.text = model.role_name
+            print(model.role_name)
+            
+        }
+        
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+    }
+    
+    /*********************** END TABLE ******************************/
 
 }

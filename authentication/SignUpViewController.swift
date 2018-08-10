@@ -228,8 +228,7 @@ class SignUpViewController: UIViewController {
                         myFunction().onGenerateUser(data: arr)
                         
                         DispatchQueue.main.async {
-                            SwiftLoader.hide()
-                            self.showDialog(description: String(describing: message),id: 1)
+                            self.AutoSignInPOST(email: email, password: password)
                         }
                         
                     }else{
@@ -296,6 +295,92 @@ class SignUpViewController: UIViewController {
         customAlert.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         customAlert.delegate = self
         self.present(customAlert, animated: true, completion: nil)
+    }
+    
+    func AutoSignInPOST(email: String, password: String){
+        
+        let myUrl = URL(string: SysPara.API_SIGN_IN)
+        var request = URLRequest(url:myUrl!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type: application/x-www-form-urlencoded")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let fcm = randomAlphaNumericString(length: 15)
+        let param = "email="+email+"&password="+password+"&fcm="+fcm+"&deviceType=IOS"
+        request.httpBody = param.data(using: String.Encoding.utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                print("error=\(String(describing: error))")
+                SwiftLoader.hide()
+                self.showDialog(description: String(describing: error),id: 0)
+                return
+            }
+            
+            do {
+                let jsonString = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                print("jsonString: \(String(describing: jsonString))")
+                
+                if let parseJSON = jsonString {
+                    
+                    // Now we can access value of First Name by its key
+                    let status = parseJSON["status"] as? String
+                    let arr = parseJSON["data"] as? NSDictionary
+                    print("status: \(String(describing: status))")
+                    print("arr: \(String(describing: arr))")
+                    
+                    if(status == "success"){
+                        var message = ""
+                        if let userArr = arr {
+                            message = (userArr["message"] as! NSString) as String
+                            let token = (userArr["token"] as! NSString) as String
+                            SysPara.TOKEN = token
+                        }
+                        
+                        myFunction().onGenerateUser(data: arr)
+                        
+                        DispatchQueue.main.async {
+                            SwiftLoader.hide()
+                            self.onTapCustomAlertButton()
+                        }
+                        
+                    }else{
+                        
+                        var message = ""
+                        if let userArr = arr {
+                            message = (userArr["message"] as! NSString) as String
+                        }
+                        DispatchQueue.main.async {
+                            SwiftLoader.hide()
+                            self.showDialog(description: String(describing: message),id: 0)
+                        }
+                    }
+                }
+            } catch {
+                SwiftLoader.hide()
+                self.showDialog(description: String(describing: error),id: 0)
+                print(error)
+            }
+        }
+        task.resume()
+        
+    }
+    
+    func randomAlphaNumericString(length: Int) -> String {
+        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let allowedCharsCount = UInt32(allowedChars.characters.count)
+        var randomString = ""
+        
+        for _ in 0..<length {
+            let randomNum = Int(arc4random_uniform(allowedCharsCount))
+            let randomIndex = allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)
+            let newCharacter = allowedChars[randomIndex]
+            randomString += String(newCharacter)
+        }
+        
+        return randomString
     }
 
 }
